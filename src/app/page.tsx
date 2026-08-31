@@ -30,11 +30,11 @@ function GoogleIcon() {
   );
 }
 
-function AsteriskLogo() {
+function AsteriskLogo({ size = 44 }: { size?: number }) {
   return (
     <svg
-      width="44"
-      height="44"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -60,7 +60,10 @@ export default async function Home() {
         <div className="pointer-events-none absolute -right-24 -top-24 h-[26rem] w-[26rem] rounded-full border border-white/10" />
         <div className="pointer-events-none absolute -bottom-48 -left-32 h-[30rem] w-[30rem] rounded-full border border-white/10" />
 
-        <AsteriskLogo />
+        <div className="flex items-center gap-3">
+          <AsteriskLogo />
+          <span className="text-2xl font-bold tracking-tight">Job Tracker</span>
+        </div>
 
         <div className="space-y-5">
           <h1 className="text-5xl font-bold leading-tight">
@@ -81,7 +84,12 @@ export default async function Home() {
 
       {/* Right sign-in panel */}
       <section className="flex h-full w-full flex-col justify-between gap-6 overflow-y-auto px-6 py-6 sm:px-12 lg:w-1/2">
-        <p className="text-xl font-bold tracking-tight">Job Tracker</p>
+        <p className="flex items-center gap-1.5 text-xl font-bold tracking-tight">
+          <span className="text-indigo-600">
+            <AsteriskLogo size={20} />
+          </span>
+          Job Tracker
+        </p>
 
         <div className="mx-auto w-full max-w-sm space-y-6">
           <div>
