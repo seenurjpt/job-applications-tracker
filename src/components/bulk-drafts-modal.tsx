@@ -111,7 +111,7 @@ export function BulkDraftsBar({
     <>
       <div
         data-testid="bulk-bar"
-        className="flex items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm"
+        className="flex flex-wrap items-center gap-3 rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm shadow-sm"
       >
         <span className="font-medium">{selected.length} selected</span>
         <Select
@@ -136,9 +136,9 @@ export function BulkDraftsBar({
       </div>
 
       {rows ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-6">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 sm:p-6">
           <div
-            className="w-full max-w-3xl space-y-4 rounded-lg bg-white p-6 shadow-xl"
+            className="w-full max-w-3xl space-y-4 rounded-lg bg-white p-4 shadow-xl sm:p-6"
             data-testid="bulk-review-modal"
           >
             <div className="flex items-center justify-between">
@@ -160,7 +160,7 @@ export function BulkDraftsBar({
                   className="rounded-md border border-neutral-200 p-3"
                   data-testid={`bulk-row-${i}`}
                 >
-                  <div className="mb-2 flex items-center justify-between text-sm">
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-1 text-sm">
                     <span className="font-medium">
                       {r.company ?? "Unknown"} , {r.role ?? "Unknown role"}
                     </span>

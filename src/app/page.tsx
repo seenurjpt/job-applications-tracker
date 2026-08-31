@@ -80,7 +80,7 @@ export default async function Home() {
       </section>
 
       {/* Right sign-in panel */}
-      <section className="flex h-full w-full flex-col justify-between px-6 py-6 sm:px-12 lg:w-1/2">
+      <section className="flex h-full w-full flex-col justify-between gap-6 overflow-y-auto px-6 py-6 sm:px-12 lg:w-1/2">
         <p className="text-xl font-bold tracking-tight">Job Tracker</p>
 
         <div className="mx-auto w-full max-w-sm space-y-6">

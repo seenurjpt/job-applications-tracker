@@ -59,7 +59,7 @@ export default async function ApiKeyPage() {
         {usage.length === 0 ? (
           <p className="text-sm text-neutral-500">No API calls yet.</p>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto"><table className="w-full min-w-96 text-sm">
             <thead className="text-left text-neutral-500">
               <tr>
                 <th className="py-1 font-medium">Kind</th>
@@ -78,7 +78,7 @@ export default async function ApiKeyPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         )}
       </Card>
     </div>

@@ -93,7 +93,7 @@ export default async function SettingsPage() {
             {accounts.map((a) => (
               <li
                 key={a._id.toHexString()}
-                className="flex items-center justify-between text-sm"
+                className="flex flex-wrap items-center justify-between gap-2 text-sm"
               >
                 <span>
                   {a.email}{" "}

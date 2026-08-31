@@ -6,7 +6,7 @@ export function ReconnectBanner({ account }: { account: AccountDTO }) {
   return (
     <div
       data-testid="reconnect-banner"
-      className="flex items-center justify-between gap-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+      className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
     >
       <span>
         Gmail access for <strong>{account.email}</strong> has expired. Sync is
@@ -43,7 +43,7 @@ export function KeyProblemBanner({ status }: { status: KeyStatusValue }) {
   return (
     <div
       data-testid="key-problem-banner"
-      className="flex items-center justify-between gap-4 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-900"
+      className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-900"
     >
       <span>
         <strong>{copy.title}</strong> {copy.hint}

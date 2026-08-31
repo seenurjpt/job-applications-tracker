@@ -82,7 +82,7 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
   if (resuming || (stalled && !resumeError)) {
     return (
       <div
-        className="flex items-center gap-3 text-sm text-amber-700"
+        className="flex flex-wrap items-center gap-3 text-sm text-amber-700"
         data-testid="sync-resuming"
       >
         <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-600" />
@@ -93,7 +93,7 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-3 text-sm text-neutral-600">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-600">
         <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
         Sync {job.status} , {job.stats.listed} listed, {job.stats.classified}{" "}
         classified, {job.stats.applications} applications found.
@@ -163,7 +163,7 @@ export function SyncControls({
 
   if (activeJob?.status === "paused") {
     return (
-      <div className="flex items-center gap-3" data-testid="sync-paused">
+      <div className="flex flex-wrap items-center gap-3" data-testid="sync-paused">
         <span className="text-sm text-amber-700">
           Sync paused ({activeJob.pausedReason ?? "unknown reason"}) , it will
           continue from where it stopped.
@@ -186,7 +186,7 @@ export function SyncControls({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Select
           value={preset}
           onChange={(e) =>

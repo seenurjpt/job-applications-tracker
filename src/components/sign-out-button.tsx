@@ -16,7 +16,10 @@ function ButtonInner({ email }: { email: string }) {
           Signing out…
         </>
       ) : (
-        `Sign out (${email})`
+        <>
+          Sign out
+          <span className="hidden sm:inline"> ({email})</span>
+        </>
       )}
     </button>
   );

@@ -65,7 +65,7 @@ export default async function ApplicationsPage({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-baseline justify-between">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h1 className="text-2xl font-semibold">Applications</h1>
         <div className="flex items-center gap-4 text-sm text-neutral-500">
           <span>{total} total</span>
@@ -74,12 +74,12 @@ export default async function ApplicationsPage({
           </a>
         </div>
       </div>
-      <nav className="flex gap-1 border-b border-neutral-200 text-sm">
+      <nav className="flex gap-1 overflow-x-auto border-b border-neutral-200 text-sm">
         {tabs.map((t) => (
           <a
             key={t.label}
             href={t.href}
-            className={`-mb-px border-b-2 px-3 py-2 font-medium ${
+            className={`-mb-px whitespace-nowrap border-b-2 px-3 py-2 font-medium ${
               t.active
                 ? "border-neutral-900 text-neutral-900"
                 : "border-transparent text-neutral-500 hover:text-neutral-900"

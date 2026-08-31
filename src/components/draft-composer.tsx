@@ -53,7 +53,7 @@ export function DraftComposer({ applicationId }: { applicationId: string }) {
 
   return (
     <div className="space-y-3" data-testid="draft-composer">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Select
           value={tone}
           onChange={(e) => setTone(e.target.value as DraftToneValue)}
@@ -84,7 +84,7 @@ export function DraftComposer({ applicationId }: { applicationId: string }) {
             value={draft.body}
             onChange={(e) => setDraft({ ...draft, body: e.target.value })}
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button onClick={create} disabled={pending} data-testid="create-draft">
               {pending ? "Creating…" : "Create draft in Gmail"}
             </Button>

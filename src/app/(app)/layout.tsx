@@ -33,8 +33,8 @@ export default async function AppLayout({
   return (
     <div className="min-h-screen">
       <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-          <nav className="flex items-center gap-6 text-sm font-medium">
+        <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2">
+          <nav className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium sm:gap-x-6">
             <Link
               href="/dashboard"
               className="flex items-center gap-1.5 text-base font-semibold"

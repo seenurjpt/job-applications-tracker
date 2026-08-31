@@ -61,7 +61,7 @@ export function ThreadTimeline({
       <ol className="space-y-3">
         {messages.map((m) => (
           <li key={m.id} className="text-sm">
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-x-3 gap-y-0.5">
               <span
                 className={`w-16 shrink-0 font-medium ${
                   m.direction === "outbound" ? "text-indigo-700" : "text-green-700"
