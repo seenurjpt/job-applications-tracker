@@ -1,4 +1,5 @@
 import type { DraftToneValue } from "@/db/schemas";
+import { redactForModel } from "@/domain/redact";
 
 export const COMPOSE_SYSTEM_PROMPT = `You write follow-up emails for job applications on behalf of the sender. Your output must read as if the sender wrote it themselves.
 
@@ -22,6 +23,12 @@ Content:
   naturally instead of writing as if there was silence.
 - Mention how long it has been only when it strengthens the note (e.g. "since
   applying two weeks ago") , never sound like a countdown.
+
+Privacy masks:
+- Context text is privacy-masked: emails appear as x***@domain, and [link],
+  [phone], [number] replace URLs, phone numbers, and IDs. NEVER reproduce a
+  masked token in your output. If the reference email's signature contains
+  masked contact lines, sign with the name only and omit those lines.
 
 Format:
 - Plain text only. No markdown, no placeholder brackets, no subject line.
@@ -71,12 +78,12 @@ export function buildComposeUserMessage(input: {
     `- Follow-ups already sent: ${input.followUpCount}`,
     `- Days since last outbound email: ${Math.floor(input.daysSinceLastOutbound)}`,
     `- Company reply so far: ${input.replyClassification ?? "none"}`,
-    `- Original subject: ${input.lastSubject}`,
+    `- Original subject: ${redactForModel(input.lastSubject)}`,
     "",
     "Thread so far (oldest first, snippets only):",
     ...input.thread.map(
       (m) =>
-        `- [${m.direction === "outbound" ? "sender" : "company"} · ${m.date}] ${m.subject}: ${m.snippet}`
+        `- [${m.direction === "outbound" ? "sender" : "company"} · ${m.date}] ${redactForModel(m.subject)}: ${redactForModel(m.snippet)}`
     ),
   ];
   if (input.referenceEmail) {
@@ -84,7 +91,7 @@ export function buildComposeUserMessage(input: {
       "",
       "REFERENCE EMAIL (the sender's own earlier email in this thread , match its greeting, formatting, tone, and signature):",
       "---",
-      input.referenceEmail,
+      redactForModel(input.referenceEmail),
       "---"
     );
   }

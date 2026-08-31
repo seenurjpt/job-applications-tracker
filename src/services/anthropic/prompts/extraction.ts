@@ -1,4 +1,10 @@
+import { maskEmailAddress, redactForModel } from "@/domain/redact";
+
 export const EXTRACTION_SYSTEM_PROMPT = `You classify email threads as job applications and extract structured details.
+
+Input text is privacy-masked: emails appear as x***@domain, and [link],
+[phone], [number] replace URLs, phone numbers, and long IDs. Treat masked
+tokens as opaque; never reproduce them in extracted fields.
 
 For each thread you receive, decide whether it is an email the sender wrote to apply
 for a job, or a direct follow-up to such an application.
@@ -48,9 +54,10 @@ export function buildExtractionUserMessage(threads: ThreadSummaryInput[]): strin
   return JSON.stringify(
     threads.map((t) => ({
       threadId: t.threadId,
-      subject: t.subject,
-      snippet: t.snippet,
-      recipients: t.to,
+      subject: redactForModel(t.subject),
+      snippet: redactForModel(t.snippet),
+      // Local parts masked; domains kept , they are the ATS/company signal.
+      recipients: t.to.map(maskEmailAddress),
       date: t.date,
     })),
     null,

@@ -46,6 +46,19 @@ export default function PrivacyPage() {
         </p>
       </PublicSection>
 
+      <PublicSection title="Sensitive-data masking">
+        <p>
+          Before anything is transmitted to Anthropic, the text is passed
+          through a masking layer: email addresses are reduced to their first
+          letter plus domain (<code>m***@company.com</code>), and links, phone
+          numbers, and long identification numbers are replaced with
+          placeholder tokens. This applies to every AI call the app makes ,
+          classification, reply analysis, intent analysis, and draft
+          generation, including the sent-email style reference described
+          above. The unmasked values never leave the app.
+        </p>
+      </PublicSection>
+
       <PublicSection title="How data is stored">
         <p>
           OAuth tokens and your API key are encrypted at rest with AES-256-GCM;

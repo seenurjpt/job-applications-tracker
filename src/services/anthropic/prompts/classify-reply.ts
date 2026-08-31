@@ -8,9 +8,14 @@ Given the subject and snippet of an inbound reply to a job application, classify
 Return ONLY a JSON object: {"classification": "positive"|"rejection"|"neutral"}
 No preamble, no markdown fences.`;
 
+import { redactForModel } from "@/domain/redact";
+
 export function buildReplyClassificationUserMessage(input: {
   subject: string;
   snippet: string;
 }): string {
-  return JSON.stringify({ subject: input.subject, snippet: input.snippet });
+  return JSON.stringify({
+    subject: redactForModel(input.subject),
+    snippet: redactForModel(input.snippet),
+  });
 }

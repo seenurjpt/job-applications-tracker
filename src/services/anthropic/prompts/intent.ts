@@ -1,6 +1,8 @@
 // Intent backfill prompt: classify what the user's latest outbound email in
 // each application thread was doing, from stored metadata only.
 
+import { redactForModel } from "@/domain/redact";
+
 export const INTENT_SYSTEM_PROMPT = `You classify what the sender's LATEST outbound email in a job-application thread is doing.
 
 Intents, with decision rules:
@@ -42,7 +44,11 @@ export function buildIntentUserMessage(items: IntentInput[]): string {
     items.map((i) => ({
       id: i.id,
       companyReplied: i.hasReply,
-      outboundMessages: i.outbound,
+      outboundMessages: i.outbound.map((m) => ({
+        date: m.date,
+        subject: redactForModel(m.subject),
+        snippet: redactForModel(m.snippet),
+      })),
     })),
     null,
     2
