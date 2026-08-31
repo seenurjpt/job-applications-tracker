@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { formatDistanceToNow } from "date-fns";
 import { currentUserId } from "@/auth";
 import * as accountsRepo from "@/db/repositories/accounts";
 import * as apiKeysRepo from "@/db/repositories/api-keys";
@@ -51,15 +52,27 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
           {account ? (
-            <p className="mt-1 text-sm text-neutral-500">
-              {account.email}
-              {account.lastSyncAt
-                ? ` · last synced ${account.lastSyncAt.toLocaleString()}`
-                : " · never synced"}
-            </p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-neutral-700 shadow-sm">
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    account.status === "active" ? "bg-green-500" : "bg-amber-500"
+                  }`}
+                />
+                {account.email}
+              </span>
+              <span
+                className="text-neutral-400"
+                title={account.lastSyncAt?.toISOString()}
+              >
+                {account.lastSyncAt
+                  ? `Synced ${formatDistanceToNow(account.lastSyncAt, { addSuffix: true })}`
+                  : "Never synced"}
+              </span>
+            </div>
           ) : null}
         </div>
         {account ? (
