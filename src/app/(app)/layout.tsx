@@ -79,7 +79,7 @@ export default async function AppLayout({
           <AppNav />
         </div>
       </header>
-      {/* The content area, not the viewport, is the scroll container — the
+      {/* The content area, not the viewport, is the scroll container , the
           scrollbar starts below the header, and its gutter is reserved on
           both edges so content stays centered. */}
       <main className="flex-1 overflow-y-auto [scrollbar-gutter:stable_both-edges]">

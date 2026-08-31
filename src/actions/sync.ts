@@ -18,7 +18,7 @@ import { runIncrementalSync } from "@/services/sync/incremental";
 /**
  * Kicks off server-side processing of a backfill job and returns immediately.
  * The job then advances page-by-page through /api/jobs/process, unaffected
- * by the user refreshing, logging out, or closing the tab — it stops only
+ * by the user refreshing, logging out, or closing the tab , it stops only
  * when it finishes, pauses on a key problem, or the user cancels it.
  * E2E runs inline so tests stay deterministic.
  */

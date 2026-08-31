@@ -6,7 +6,7 @@
 // which dispatches the "apptour:start" event.
 //
 // Smoothness: a requestAnimationFrame loop measures the target every frame
-// and eases the spotlight/card toward it with direct style writes — no
+// and eases the spotlight/card toward it with direct style writes , no
 // per-frame React renders, no CSS transitions fighting live scroll. Step
 // changes glide; scrolling tracks 1:1.
 
@@ -30,17 +30,17 @@ const STEPS: TourStep[] = [
   {
     target: "sync",
     title: "Sync your sent mail",
-    body: "Pick a time range and hit Sync — AI finds the job applications you actually sent. Use Estimate cost first to see roughly how many requests it will make on your key. Sync runs on the server: refresh or log out freely, and cancel anytime.",
+    body: "Pick a time range and hit Sync , AI finds the job applications you actually sent. Use Estimate cost first to see roughly how many requests it will make on your key. Sync runs on the server: refresh or log out freely, and cancel anytime.",
   },
   {
     target: "stats",
     title: "Your pipeline at a glance",
-    body: "Statuses are derived automatically from real thread activity — replies flip applications to Replied or Interviewing, silence surfaces Needs follow-up and Ghosted.",
+    body: "Statuses are derived automatically from real thread activity , replies flip applications to Replied or Interviewing, silence surfaces Needs follow-up and Ghosted.",
   },
   {
     target: "view-all",
     title: "Dig into applications",
-    body: "Search, filter, and sort every application. The Mailed-for badge tells you what your last email did, and you can generate follow-up drafts — one at a time or in bulk — written in your own style.",
+    body: "Search, filter, and sort every application. The Mailed-for badge tells you what your last email did, and you can generate follow-up drafts , one at a time or in bulk , written in your own style.",
   },
   {
     target: "account",
@@ -54,7 +54,7 @@ const CARD_GAP = 14;
 const EASE = 0.22;
 
 function findTarget(step: TourStep): HTMLElement | null {
-  // Some anchors render twice (desktop + mobile nav) — pick the visible one.
+  // Some anchors render twice (desktop + mobile nav) , pick the visible one.
   const candidates = document.querySelectorAll<HTMLElement>(
     `[data-tour="${step.target}"]`
   );

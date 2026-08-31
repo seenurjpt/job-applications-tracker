@@ -1,7 +1,7 @@
 // Fire-and-forget job dispatch: each backfill page runs in its own request
 // to /api/jobs/process, which processes the page after responding and then
 // dispatches the next one. The chain lives entirely server-side, so a user
-// refreshing, logging out, or closing the tab never stops a sync — only
+// refreshing, logging out, or closing the tab never stops a sync , only
 // cancelling the job does (each link re-reads the job and stops on
 // "cancelled"). The stall heartbeat + resume remains the safety net if a
 // link dies (deploy, crash, timeout).
@@ -19,7 +19,7 @@ export function jobsDispatchSecret(): string {
 
 /**
  * Triggers processing of the job's next page. Resolves as soon as the
- * receiving invocation has accepted the work (202) — the page itself is
+ * receiving invocation has accepted the work (202) , the page itself is
  * processed after that response, keeping every invocation short.
  */
 export async function dispatchProcessJob(jobId: ObjectId): Promise<void> {

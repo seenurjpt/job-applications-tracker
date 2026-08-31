@@ -41,8 +41,8 @@ export function Input({
   return (
     <input
       className={cn(
-        "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm",
-        "focus:outline-none focus:ring-2 focus:ring-indigo-500",
+        "h-9 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm shadow-sm transition-colors",
+        "hover:border-neutral-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/25",
         className
       )}
       {...props}
@@ -57,8 +57,8 @@ export function Select({
   return (
     <select
       className={cn(
-        "h-9 rounded-md border border-neutral-300 bg-white px-2 text-sm",
-        "focus:outline-none focus:ring-2 focus:ring-indigo-500",
+        "select-chevron h-9 cursor-pointer appearance-none rounded-lg border border-neutral-300 bg-white pl-3 pr-8 text-sm shadow-sm transition-colors",
+        "hover:border-neutral-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/25",
         className
       )}
       {...props}

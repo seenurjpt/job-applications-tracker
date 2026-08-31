@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/lib/env";
 
-// Public, indexable pages only — everything else is behind sign-in.
+// Public, indexable pages only , everything else is behind sign-in.
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = env.AUTH_URL.replace(/\/$/, "");
   return [

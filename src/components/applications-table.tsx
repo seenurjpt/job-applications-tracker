@@ -308,13 +308,16 @@ export function ApplicationsTable({
 
       <BulkDraftsBar selected={selected} onDone={() => setRowSelection({})} />
 
-      <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white shadow-sm">
         <table className="w-full text-sm" data-testid="applications-table">
-          <thead className="border-b border-neutral-200 bg-neutral-50 text-left">
+          <thead className="border-b border-neutral-200 bg-neutral-50/80 text-left">
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
                 {hg.headers.map((h) => (
-                  <th key={h.id} className="px-3 py-2 font-medium">
+                  <th
+                    key={h.id}
+                    className="whitespace-nowrap px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-neutral-500"
+                  >
                     {h.isPlaceholder
                       ? null
                       : flexRender(h.column.columnDef.header, h.getContext())}
@@ -328,10 +331,10 @@ export function ApplicationsTable({
               <Fragment key={row.id}>
                 <tr
                   data-testid={`app-row-${row.index}`}
-                  className="border-b border-neutral-100 hover:bg-neutral-50"
+                  className="border-b border-neutral-100 transition-colors last:border-0 hover:bg-indigo-50/40"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-3 py-2">
+                    <td key={cell.id} className="px-3 py-2.5">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

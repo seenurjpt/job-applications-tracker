@@ -1,5 +1,5 @@
 // Internal endpoint driving the server-side sync chain. Secured by a secret
-// derived from AUTH_SECRET — never called by browsers, only by the app
+// derived from AUTH_SECRET , never called by browsers, only by the app
 // itself (see src/services/sync/dispatch.ts).
 
 import { after, NextResponse } from "next/server";
