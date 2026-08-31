@@ -228,9 +228,19 @@ export function SyncControls({
         </Button>
       </div>
       {estimate ? (
-        <p className="text-xs text-neutral-500" data-testid="sync-estimate">
-          {estimate}
-        </p>
+        <div
+          className="flex max-w-md items-start justify-between gap-2 rounded-md border border-indigo-100 bg-indigo-50 px-3 py-2 text-xs leading-5 text-indigo-900"
+          data-testid="sync-estimate"
+        >
+          <span>{estimate}</span>
+          <button
+            aria-label="Dismiss estimate"
+            className="shrink-0 text-indigo-400 hover:text-indigo-700"
+            onClick={() => setEstimate(null)}
+          >
+            ✕
+          </button>
+        </div>
       ) : null}
       {!canSync && disabledReason ? (
         <p className="text-xs text-neutral-500" data-testid="sync-disabled-reason">
