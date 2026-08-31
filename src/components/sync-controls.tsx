@@ -100,31 +100,63 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
     );
   }
 
+  const stats = [
+    { label: "listed", value: job.stats.listed },
+    { label: "classified", value: job.stats.classified },
+    { label: "applications", value: job.stats.applications },
+  ];
+
   return (
-    <div className="space-y-1">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-neutral-600">
-        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
-        Sync {job.status} , {job.stats.listed} listed, {job.stats.classified}{" "}
-        classified, {job.stats.applications} applications found.
-        {startedMs !== null ? (
-          <span className="tabular-nums text-neutral-500" data-testid="sync-elapsed">
-            {formatElapsed(now - startedMs)}
-          </span>
-        ) : null}
-        <Button size="sm" variant="outline" onClick={() => router.refresh()}>
-          Refresh
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="text-red-600 hover:bg-red-50"
-          disabled={cancelling}
-          data-testid="cancel-sync"
-          onClick={() => void doCancel()}
-        >
-          {cancelling ? "Cancelling…" : "Cancel"}
-        </Button>
+    <div
+      className="w-full space-y-2.5 rounded-lg border border-indigo-100 bg-indigo-50/70 p-3 sm:min-w-96"
+      data-testid="sync-running"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        <div className="flex items-center gap-2 text-sm font-medium text-indigo-900">
+          <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-600" />
+          {job.status === "queued" ? "Starting sync…" : "Syncing your sent mail"}
+          {startedMs !== null ? (
+            <span
+              className="font-normal tabular-nums text-indigo-400"
+              data-testid="sync-elapsed"
+            >
+              {formatElapsed(now - startedMs)}
+            </span>
+          ) : null}
+        </div>
+        <div className="flex items-center gap-0.5">
+          <button
+            className="rounded-md px-2 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-100"
+            onClick={() => router.refresh()}
+          >
+            Refresh
+          </button>
+          <button
+            className="rounded-md px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+            disabled={cancelling}
+            data-testid="cancel-sync"
+            onClick={() => void doCancel()}
+          >
+            {cancelling ? "Cancelling…" : "Cancel"}
+          </button>
+        </div>
       </div>
+
+      <div className="h-1 overflow-hidden rounded-full bg-indigo-100">
+        <div className="animate-indeterminate h-full w-1/3 rounded-full bg-indigo-500" />
+      </div>
+
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-indigo-900/70">
+        {stats.map((s) => (
+          <span key={s.label}>
+            <span className="font-semibold tabular-nums text-indigo-900">
+              {s.value}
+            </span>{" "}
+            {s.label}
+          </span>
+        ))}
+      </div>
+
       {resumeError ? (
         <p className="text-xs text-red-600">
           Could not resume automatically ({resumeError}).{" "}
