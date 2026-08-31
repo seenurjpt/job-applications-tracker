@@ -12,7 +12,7 @@ import { REQUIRED_SCOPES } from "@/services/gmail/tokens";
 export async function GET(): Promise<NextResponse> {
   const userId = await currentUserId();
   if (!userId) {
-    return NextResponse.redirect(new URL("/signin", env.AUTH_URL));
+    return NextResponse.redirect(new URL("/", env.AUTH_URL));
   }
 
   const state = randomBytes(24).toString("base64url");

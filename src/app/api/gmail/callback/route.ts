@@ -18,7 +18,7 @@ function redirectTo(path: string): NextResponse {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const userId = await currentUserId();
-  if (!userId) return redirectTo("/signin");
+  if (!userId) return redirectTo("/");
 
   const params = req.nextUrl.searchParams;
   if (params.get("error")) {

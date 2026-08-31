@@ -12,12 +12,12 @@ import { Button, Card, Input } from "@/components/ui";
 
 export default async function SettingsPage() {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
   const [user, accounts] = await Promise.all([
     usersRepo.findById(userId),
     accountsRepo.findByUser(userId),
   ]);
-  if (!user) redirect("/signin");
+  if (!user) redirect("/");
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">

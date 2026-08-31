@@ -39,7 +39,7 @@ export default async function OnboardingPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
   const params = await searchParams;
 
   const [accounts, apiKey] = await Promise.all([

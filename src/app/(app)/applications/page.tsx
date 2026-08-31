@@ -18,7 +18,7 @@ export default async function ApplicationsPage({
   searchParams: Promise<Search>;
 }) {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
   const params = await searchParams;
 
   const presetRaw = str(params.range);

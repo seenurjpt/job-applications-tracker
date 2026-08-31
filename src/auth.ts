@@ -39,7 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   trustHost: true,
   providers,
-  pages: { signIn: "/signin" },
+  pages: { signIn: "/" },
   callbacks: {
     async jwt({ token, user, account }) {
       // First sign-in: persist our own user record and stamp its id.

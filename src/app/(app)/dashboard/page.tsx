@@ -20,7 +20,7 @@ const STAT_LABELS: Array<{ key: string; label: string }> = [
 
 export default async function DashboardPage() {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
 
   const [accounts, apiKey, counts] = await Promise.all([
     accountsRepo.findByUser(userId),

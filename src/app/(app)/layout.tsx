@@ -13,9 +13,9 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (!session?.user) redirect("/signin");
+  if (!session?.user) redirect("/");
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
 
   const [accounts, apiKey] = await Promise.all([
     accountsRepo.findByUser(userId),

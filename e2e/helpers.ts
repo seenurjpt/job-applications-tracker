@@ -23,7 +23,7 @@ export async function stubControl(
 }
 
 export async function signInE2E(page: Page): Promise<void> {
-  await page.goto("/signin");
+  await page.goto("/");
   await page.getByTestId("e2e-email").fill(E2E_EMAIL);
   await page.getByTestId("e2e-signin").click();
   await page.waitForURL(/\/(onboarding|dashboard)/, { timeout: 60_000 });

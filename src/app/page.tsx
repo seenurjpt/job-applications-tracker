@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
+import { env } from "@/lib/env";
 
 function GoogleIcon() {
   return (
@@ -104,6 +105,33 @@ export default async function Home() {
               Login with Google
             </button>
           </form>
+
+          {env.E2E_TEST_MODE ? (
+            <form
+              action={async (formData: FormData) => {
+                "use server";
+                await signIn("e2e", {
+                  email: String(formData.get("email") ?? ""),
+                  redirectTo: "/onboarding",
+                });
+              }}
+              className="space-y-2"
+            >
+              <input
+                name="email"
+                placeholder="e2e email"
+                data-testid="e2e-email"
+                className="h-9 w-full rounded-md border border-neutral-300 px-3 text-sm"
+              />
+              <button
+                type="submit"
+                data-testid="e2e-signin"
+                className="h-9 w-full rounded-md border border-neutral-300 text-sm hover:bg-neutral-50"
+              >
+                E2E sign in
+              </button>
+            </form>
+          ) : null}
 
           <ul className="space-y-2 text-sm text-neutral-600">
             <li className="flex gap-2">

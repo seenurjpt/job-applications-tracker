@@ -16,7 +16,7 @@ const MODEL_OPTIONS = [
 
 export default async function ApiKeyPage() {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
 
   const [rec, usage] = await Promise.all([
     apiKeysRepo.findByUser(userId),

@@ -46,6 +46,6 @@ export async function deleteAccount() {
   const userId = await currentUserId();
   if (!userId) return { ok: false as const, error: "unauthenticated" };
   await usersRepo.deleteAllUserData(userId);
-  await signOut({ redirectTo: "/signin" });
+  await signOut({ redirectTo: "/" });
   return { ok: true as const };
 }

@@ -18,7 +18,7 @@ export default async function ApplicationDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const userId = await currentUserId();
-  if (!userId) redirect("/signin");
+  if (!userId) redirect("/");
   const { id } = await params;
   if (!ObjectId.isValid(id)) notFound();
 
