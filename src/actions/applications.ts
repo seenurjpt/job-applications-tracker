@@ -100,6 +100,43 @@ export async function analyzeIntents() {
   return { ok: true as const, analyzed: classified, remaining: items.length - classified };
 }
 
+/**
+ * Full body of one thread message, fetched live from Gmail for display.
+ * Never stored and never sent to Anthropic — the metadata-only posture
+ * applies to storage and third-party transfer, not to showing the user
+ * their own mail.
+ */
+export async function getFullMessage(input: unknown) {
+  const userId = await currentUserId();
+  if (!userId) return { ok: false as const, error: "unauthenticated" };
+  const parsed = z
+    .object({
+      applicationId: z.string().refine(ObjectId.isValid),
+      messageId: z.string().refine(ObjectId.isValid),
+    })
+    .safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: "invalid_input" };
+
+  const app = await applications.findById(new ObjectId(parsed.data.applicationId));
+  if (!app || !app.userId.equals(userId))
+    return { ok: false as const, error: "not_found" };
+
+  const { findByApplication } = await import("@/db/repositories/messages");
+  const message = (await findByApplication(app._id)).find((m) =>
+    m._id.equals(new ObjectId(parsed.data.messageId))
+  );
+  if (!message) return { ok: false as const, error: "not_found" };
+
+  const { getValidAccessToken } = await import("@/services/gmail/tokens");
+  const token = await getValidAccessToken(message.accountId);
+  if (!token.ok) return { ok: false as const, error: token.error };
+
+  const { getMessageBody } = await import("@/services/gmail/messages");
+  const body = await getMessageBody(token.value, message.gmailMessageId);
+  if (!body) return { ok: false as const, error: "no_body" };
+  return { ok: true as const, body: body.slice(0, 50_000) };
+}
+
 const statusSchema = z.object({
   id: z.string().refine(ObjectId.isValid),
   status: ApplicationStatus,

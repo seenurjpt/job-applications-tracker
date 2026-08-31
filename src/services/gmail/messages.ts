@@ -144,6 +144,55 @@ export async function getThread(
   return (res.messages ?? []).map(parseMessage);
 }
 
+interface RawPayloadPart {
+  mimeType?: string;
+  body?: { data?: string };
+  parts?: RawPayloadPart[];
+}
+
+/** Depth-first search for the first part of the given MIME type with data. */
+function findPartData(part: RawPayloadPart, mime: string): string | null {
+  if (part.mimeType === mime && part.body?.data) return part.body.data;
+  for (const p of part.parts ?? []) {
+    const found = findPartData(p, mime);
+    if (found) return found;
+  }
+  return null;
+}
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<(style|script)[\s\S]*?<\/\1>/gi, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|tr|li|h[1-6])>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+/**
+ * Full body of ONE message, fetched on demand for DISPLAY ONLY (§5.5 keeps
+ * stored data and Anthropic transfers metadata-only; showing the user their
+ * own email is neither). Prefers text/plain; falls back to stripped HTML.
+ */
+export async function getMessageBody(
+  accessToken: string,
+  id: string
+): Promise<string | null> {
+  const raw = await gmailFetch<RawGmailMessage & { payload?: RawPayloadPart }>(
+    accessToken,
+    `/gmail/v1/users/me/messages/${id}`,
+    { params: { format: "full" } }
+  );
+  if (!raw.payload) return null;
+  const plain = findPartData(raw.payload, "text/plain");
+  if (plain) return Buffer.from(plain, "base64url").toString("utf8");
+  const html = findPartData(raw.payload, "text/html");
+  if (html) return stripHtml(Buffer.from(html, "base64url").toString("utf8"));
+  return null;
+}
+
 export async function getProfile(
   accessToken: string
 ): Promise<{ emailAddress: string; historyId: string }> {

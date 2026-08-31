@@ -10,6 +10,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { StatusOverride } from "@/components/status-override";
 import { InlineEditCell } from "@/components/inline-edit-cell";
 import { DraftComposer } from "@/components/draft-composer";
+import { ThreadTimeline } from "@/components/thread-timeline";
 
 export default async function ApplicationDetailPage({
   params,
@@ -99,37 +100,11 @@ export default async function ApplicationDetailPage({
           <h2 className="mb-3 text-sm font-semibold text-neutral-500">
             Thread timeline
           </h2>
-          <ol className="space-y-3">
-            {thread.map((m) => {
-              const dtoM = toMessageDTO(m);
-              return (
-                <li key={dtoM.id} className="flex gap-3 text-sm">
-                  <span
-                    className={`w-16 shrink-0 font-medium ${
-                      dtoM.direction === "outbound"
-                        ? "text-blue-700"
-                        : "text-green-700"
-                    }`}
-                  >
-                    {dtoM.direction === "outbound" ? "You →" : "← Them"}
-                  </span>
-                  <span className="w-28 shrink-0 text-neutral-500">
-                    {new Date(dtoM.sentAt).toLocaleDateString()}
-                  </span>
-                  <span>
-                    <strong>{dtoM.subject}</strong>
-                    <span className="text-neutral-500"> — {dtoM.snippet}</span>
-                    {dtoM.isFollowUp ? (
-                      <em className="ml-2 text-amber-700">follow-up</em>
-                    ) : null}
-                  </span>
-                </li>
-              );
-            })}
-            {thread.length === 0 ? (
-              <li className="text-sm text-neutral-400">No messages stored.</li>
-            ) : null}
-          </ol>
+          <ThreadTimeline
+            applicationId={dto.id}
+            threadId={dto.threadId}
+            messages={thread.map(toMessageDTO)}
+          />
         </Card>
       </div>
 
