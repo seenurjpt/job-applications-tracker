@@ -172,8 +172,8 @@ export default async function Home() {
           </p>
         </div>
 
-        <footer className="flex items-center justify-between text-xs text-neutral-400">
-          <span className="lg:hidden">
+        <footer className="flex flex-col items-center gap-1.5 text-center text-xs text-neutral-400 lg:flex-row lg:justify-between lg:text-left">
+          <span className="whitespace-nowrap lg:hidden">
             © 2026 Job Tracker · by{" "}
             <a
               href="https://portfolio-sunny-five.vercel.app/"
@@ -184,8 +184,8 @@ export default async function Home() {
               Sunny Rajput
             </a>
           </span>
-          <span className="hidden lg:inline" />
-          <span className="flex gap-4">
+          <span className="hidden lg:block" />
+          <span className="flex flex-wrap justify-center gap-x-4 gap-y-1 [&_a]:whitespace-nowrap">
             <Link href="/about" className="hover:text-neutral-700 hover:underline">
               About
             </Link>
