@@ -33,7 +33,7 @@ export default async function AppLayout({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-neutral-200 bg-white">
+      <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-6">
             <Link
