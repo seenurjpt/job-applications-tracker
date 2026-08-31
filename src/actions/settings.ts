@@ -7,6 +7,12 @@ import { currentUserId, signOut } from "@/auth";
 import * as usersRepo from "@/db/repositories/users";
 import * as accountsRepo from "@/db/repositories/accounts";
 
+export async function markTourSeen(): Promise<void> {
+  const userId = await currentUserId();
+  if (!userId) return;
+  await usersRepo.markTourSeen(userId);
+}
+
 const settingsSchema = z.object({
   followUpAfterDays: z.coerce.number().int().min(1).max(90).optional(),
   ghostAfterDays: z.coerce.number().int().min(1).max(365).optional(),

@@ -76,12 +76,14 @@ export default async function DashboardPage() {
           ) : null}
         </div>
         {account ? (
-          <SyncControls
-            accountId={toAccountDTO(account).id}
-            canSync={canSync}
-            disabledReason={disabledReason}
-            activeJob={activeJob ? toSyncJobDTO(activeJob) : null}
-          />
+          <div data-tour="sync">
+            <SyncControls
+              accountId={toAccountDTO(account).id}
+              canSync={canSync}
+              disabledReason={disabledReason}
+              activeJob={activeJob ? toSyncJobDTO(activeJob) : null}
+            />
+          </div>
         ) : (
           <Link href="/onboarding" className="text-sm font-medium text-indigo-600 hover:underline">
             Finish onboarding
@@ -89,7 +91,10 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <div
+        data-tour="stats"
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6"
+      >
         {STAT_LABELS.map((s) => (
           <Card key={s.key} className="text-center">
             <p className="text-2xl font-semibold" data-testid={`stat-${s.key}`}>
@@ -110,7 +115,7 @@ export default async function DashboardPage() {
         </Card>
       ) : null}
 
-      <div>
+      <div data-tour="view-all" className="inline-block">
         <Link
           href="/applications"
           className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline"

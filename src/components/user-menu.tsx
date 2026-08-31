@@ -54,7 +54,7 @@ export function UserMenu({
   const initial = (name ?? email).charAt(0).toUpperCase();
 
   return (
-    <div className="relative">
+    <div className="relative" data-tour="account">
       <button
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"

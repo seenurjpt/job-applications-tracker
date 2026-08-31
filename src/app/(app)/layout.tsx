@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, currentUserId, signOut } from "@/auth";
+import { markTourSeen } from "@/actions/settings";
 import * as accountsRepo from "@/db/repositories/accounts";
 import * as apiKeysRepo from "@/db/repositories/api-keys";
+import * as usersRepo from "@/db/repositories/users";
 import { toAccountDTO } from "@/lib/serialize";
 import { KeyProblemBanner, ReconnectBanner } from "@/components/banners";
 import { AppNav } from "@/components/app-nav";
+import { AppTour, TourButton } from "@/components/app-tour";
 import { UserMenu } from "@/components/user-menu";
 
 export default async function AppLayout({
@@ -18,9 +21,10 @@ export default async function AppLayout({
   const userId = await currentUserId();
   if (!userId) redirect("/");
 
-  const [accounts, apiKey] = await Promise.all([
+  const [accounts, apiKey, user] = await Promise.all([
     accountsRepo.findByUser(userId),
     apiKeysRepo.findByUser(userId),
+    usersRepo.findById(userId),
   ]);
   const needsReconnect = accounts.find((a) => a.status === "needs_reconnect");
   const keyProblem =
@@ -57,15 +61,18 @@ export default async function AppLayout({
             </Link>
             <AppNav className="hidden sm:flex" />
           </div>
-          <UserMenu
-            name={session.user.name ?? null}
-            email={session.user.email ?? ""}
-            image={session.user.image ?? null}
-            signOutAction={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          />
+          <div className="flex items-center gap-2">
+            <TourButton />
+            <UserMenu
+              name={session.user.name ?? null}
+              email={session.user.email ?? ""}
+              image={session.user.image ?? null}
+              signOutAction={async () => {
+                "use server";
+                await signOut({ redirectTo: "/" });
+              }}
+            />
+          </div>
         </div>
         {/* Mobile nav row */}
         <div className="no-scrollbar mx-auto max-w-6xl overflow-x-auto border-t border-neutral-100 px-4 py-1.5 sm:hidden">
@@ -84,6 +91,7 @@ export default async function AppLayout({
           {children}
         </div>
       </main>
+      <AppTour autoStart={!user?.tourSeenAt} markSeenAction={markTourSeen} />
     </div>
   );
 }

@@ -19,6 +19,8 @@ export const userSchema = z.object({
     // from the API, so the user can correct it in settings.
     timezone: z.string().default("UTC"),
   }),
+  // First-run product tour: null until the user finishes or skips it once.
+  tourSeenAt: z.date().nullable().default(null),
   createdAt: z.date(),
 });
 

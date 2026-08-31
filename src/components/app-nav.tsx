@@ -14,7 +14,10 @@ const LINKS = [
 export function AppNav({ className }: { className?: string }) {
   const pathname = usePathname();
   return (
-    <nav className={cn("flex items-center gap-1 text-sm font-medium", className)}>
+    <nav
+      data-tour="nav"
+      className={cn("flex items-center gap-1 text-sm font-medium", className)}
+    >
       {LINKS.map((l) => {
         const active = pathname === l.href || pathname.startsWith(`${l.href}/`);
         return (

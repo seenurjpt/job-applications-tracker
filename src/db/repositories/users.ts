@@ -17,6 +17,7 @@ export async function upsertByEmail(input: {
       $setOnInsert: {
         email: input.email,
         settings: { followUpAfterDays: 7, ghostAfterDays: 30, timezone: "UTC" },
+        tourSeenAt: null,
         createdAt: now,
       },
     },
@@ -47,6 +48,10 @@ export async function updateSettings(
     $set["settings.timezone"] = settings.timezone;
   if (Object.keys($set).length === 0) return;
   await col().updateOne({ _id: id }, { $set });
+}
+
+export async function markTourSeen(id: ObjectId): Promise<void> {
+  await col().updateOne({ _id: id }, { $set: { tourSeenAt: new Date() } });
 }
 
 /** Account deletion: remove the user and every piece of their data (§10). */
