@@ -3,6 +3,24 @@
 
 import type { Application, Draft, GmailAccount, Message, SyncJob } from "@/db/schemas";
 
+/**
+ * Gmail snippets come back HTML-entity-encoded ("I&#39;d", "&amp;"). Decode
+ * for display; `&amp;` last so double-encoded input can't smuggle entities.
+ */
+export function decodeEntities(s: string): string {
+  return s
+    .replace(/&#(\d+);/g, (_, n: string) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n: string) =>
+      String.fromCodePoint(parseInt(n, 16))
+    )
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&");
+}
+
 export interface ApplicationDTO {
   id: string;
   threadId: string;
@@ -26,8 +44,8 @@ export function toApplicationDTO(a: Application): ApplicationDTO {
   return {
     id: a._id.toHexString(),
     threadId: a.threadId,
-    company: a.company,
-    role: a.role,
+    company: a.company ? decodeEntities(a.company) : a.company,
+    role: a.role ? decodeEntities(a.role) : a.role,
     contactName: a.contactName,
     contactEmail: a.contactEmail,
     source: a.source,
@@ -58,8 +76,8 @@ export function toMessageDTO(m: Message): MessageDTO {
   return {
     id: m._id.toHexString(),
     direction: m.direction,
-    subject: m.subject,
-    snippet: m.snippet,
+    subject: decodeEntities(m.subject),
+    snippet: decodeEntities(m.snippet),
     from: m.from,
     to: m.to,
     sentAt: m.sentAt.toISOString(),

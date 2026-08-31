@@ -32,6 +32,10 @@ export const ATS_DOMAINS = [
 
 const RECRUITING_LOCAL_PART = /^(careers|jobs|hr|recruit\w*|talent)$/i;
 
+// Contains-match on the local part: catches no-reply, noreply, donotreply,
+// notifications, jobalerts, mailer-daemon, and similar automated boxes.
+const NO_REPLY_LOCAL_PART = /no-?reply|do-?not-?reply|notifications?|alerts?|mailer|newsletter/i;
+
 function domainOf(address: string): string {
   return address.split("@")[1]?.toLowerCase() ?? "";
 }
@@ -46,6 +50,14 @@ export function looksLikeApplication(m: {
   snippet: string;
   to: string[];
 }): boolean {
+  // Mail addressed only to no-reply/notification boxes is never an
+  // application the user made — it's a reply to automated mail.
+  if (
+    m.to.length > 0 &&
+    m.to.every((addr) => NO_REPLY_LOCAL_PART.test(localPartOf(addr)))
+  )
+    return false;
+
   if (POSITIVE.test(m.subject) || POSITIVE.test(m.snippet)) return true;
 
   const domains = m.to.map(domainOf);
@@ -61,13 +73,4 @@ export function looksLikeApplication(m: {
     return true;
 
   return false;
-}
-
-/**
- * Phase 8 inbox pass (§5.4): LinkedIn Easy Apply and most ATS portals produce a
- * confirmation email in the INBOX, not a sent email. Query for ATS senders.
- */
-export function atsInboxQuery(afterBefore: string): string {
-  const froms = ATS_DOMAINS.map((d) => `from:${d}`).join(" OR ");
-  return `in:inbox (${froms}) ${afterBefore}`.trim();
 }

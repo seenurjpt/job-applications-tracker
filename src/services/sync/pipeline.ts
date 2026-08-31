@@ -1,7 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { ObjectId } from "mongodb";
 import { toGmailQuery } from "@/domain/date-range";
-import { atsInboxQuery, looksLikeApplication } from "@/domain/prefilter";
+import { looksLikeApplication } from "@/domain/prefilter";
 import { assembleThread } from "@/domain/thread";
 import { deriveStatus, type StatusConfig } from "@/domain/status";
 import { logger } from "@/lib/logger";
@@ -150,12 +150,6 @@ export async function processNextPage(jobId: ObjectId): Promise<PageOutcome> {
     await syncJobs.savePageToken(job._id, page.nextPageToken);
     return { kind: "continue" };
   }
-
-  // Phase 8 (§5.4): LinkedIn Easy Apply and most ATS portals produce a
-  // confirmation email in the INBOX, not a sent email. One extra pass over
-  // ATS sender domains catches those applications.
-  const inboxOutcome = await inboxAtsPass(ctx, q);
-  if (inboxOutcome) return inboxOutcome;
 
   await syncJobs.complete(job._id);
   await accountsRepo.setLastSyncAt(account._id, new Date());
@@ -314,202 +308,6 @@ export async function processMetadataBatch(
   return null;
 }
 
-/**
- * Inbox pass over ATS confirmation senders (§5.4). These threads have no
- * outbound message, so they go through hydrateInboundOnly. Classification is
- * cached the same way — never billed twice. Returns a paused outcome on a
- * key failure, else null.
- */
-async function inboxAtsPass(
-  ctx: SyncContext,
-  sentQuery: string
-): Promise<PageOutcome | null> {
-  const { job, account, user } = ctx;
-  const dateClause = sentQuery.replace(/^in:sent\s+/, "");
-  const q = atsInboxQuery(dateClause);
-
-  try {
-    let pageToken: string | null = null;
-    for (let i = 0; i < 10; i++) {
-      const page = await listMessages(ctx.accessToken, q, pageToken, PAGE_SIZE);
-      const metas = await getMetadataBatch(
-        ctx.accessToken,
-        page.ids.map((m) => m.id)
-      );
-
-      await rawMessages.upsertMany(
-        metas.map((m) => ({
-          accountId: account._id,
-          gmailMessageId: m.gmailMessageId,
-          threadId: m.threadId,
-          subject: m.subject,
-          snippet: m.snippet,
-          from: m.from,
-          to: m.to,
-          sentAt: m.sentAt,
-          rfcMessageId: m.rfcMessageId,
-          references: m.references,
-        }))
-      );
-
-      const threadIds = [...new Set(metas.map((m) => m.threadId))];
-      const cached = await rawMessages.findClassifications(account._id, threadIds);
-      const summaries: ThreadSummaryInput[] = [];
-      for (const threadId of threadIds) {
-        if (cached.has(threadId)) continue;
-        if (await applicationsRepo.findByThread(account._id, threadId)) continue;
-        const first = metas.find((m) => m.threadId === threadId)!;
-        summaries.push({
-          threadId,
-          subject: first.subject,
-          snippet: first.snippet,
-          to: first.to,
-          date: first.sentAt.toISOString().slice(0, 10),
-        });
-      }
-
-      const deps = {
-        client: ctx.client,
-        model: ctx.extractionModel,
-        userId: user._id,
-        syncJobId: job._id,
-      };
-      const results: ExtractionResult[] = [];
-      for (let b = 0; b < summaries.length; b += EXTRACTION_BATCH_SIZE) {
-        results.push(
-          ...(await extractThreadBatch(deps, summaries.slice(b, b + EXTRACTION_BATCH_SIZE)))
-        );
-      }
-      await syncJobs.addStats(job._id, { classified: results.length });
-      await rawMessages.saveClassifications(
-        results.map((r) => ({
-          accountId: account._id,
-          threadId: r.threadId,
-          isJobApplication: r.isJobApplication,
-          confidence: r.confidence,
-          model: ctx.extractionModel,
-        }))
-      );
-
-      let newApplications = 0;
-      for (const r of results) {
-        if (!r.isJobApplication || r.confidence < CONFIDENCE_THRESHOLD) continue;
-        if (await hydrateInboundOnly(ctx, r)) newApplications++;
-      }
-      await syncJobs.addStats(job._id, { applications: newApplications });
-
-      if (!page.nextPageToken) break;
-      pageToken = page.nextPageToken;
-    }
-    return null;
-  } catch (e) {
-    if (e instanceof AnthropicKeyError) {
-      await apiKeys.setStatus(user._id, e.kind, e.kind);
-      await syncJobs.pause(job._id, `key_${e.kind}`);
-      return { kind: "paused", reason: `key_${e.kind}` };
-    }
-    // The inbox pass is best-effort — never fail the whole sync over it.
-    logger.warn("ATS inbox pass failed; sent-mail results are unaffected", e);
-    return null;
-  }
-}
-
-/**
- * Upserts an application from an inbound-only ATS thread. The confirmation
- * email itself is the application event: appliedAt (and the lastOutboundAt
- * proxy) come from it; later inbound messages count as replies.
- */
-async function hydrateInboundOnly(
-  ctx: SyncContext,
-  extraction: ExtractionResult
-): Promise<boolean> {
-  const { account, user } = ctx;
-  const threadMessages = await getThread(ctx.accessToken, extraction.threadId);
-  if (threadMessages.length === 0) return false;
-  const ordered = [...threadMessages].sort(
-    (a, b) => a.sentAt.getTime() - b.sentAt.getTime()
-  );
-  const hasOutbound = ordered.some(
-    (m) => m.labelIds.includes("SENT") || m.from === account.email
-  );
-  if (hasOutbound) return hydrateAndUpsert(ctx, extraction);
-
-  const confirmation = ordered[0]!;
-  const later = ordered.slice(1);
-  const lastInboundAt = later.length > 0 ? later[later.length - 1]!.sentAt : null;
-
-  let replyClassification: "positive" | "rejection" | "neutral" | null = null;
-  if (later.length > 0) {
-    const existing = await applicationsRepo.findByThread(account._id, extraction.threadId);
-    if (
-      existing?.replyClassification &&
-      existing.lastInboundAt?.getTime() === lastInboundAt?.getTime()
-    ) {
-      replyClassification = existing.replyClassification;
-    } else {
-      replyClassification = await classifyReply(
-        { client: ctx.client, model: ctx.extractionModel, userId: user._id, syncJobId: ctx.job._id },
-        { subject: later[later.length - 1]!.subject, snippet: later[later.length - 1]!.snippet }
-      );
-    }
-  }
-
-  const status = deriveStatus(
-    {
-      lastOutboundAt: confirmation.sentAt,
-      lastInboundAt,
-      replyClassification,
-      now: new Date(),
-    },
-    statusConfig(user)
-  );
-
-  const before = await applicationsRepo.findByThread(account._id, extraction.threadId);
-  const app = await applicationsRepo.upsertFromExtraction({
-    userId: user._id,
-    accountId: account._id,
-    threadId: extraction.threadId,
-    company: extraction.company,
-    role: extraction.role,
-    contactName: extraction.contactName,
-    contactEmail: confirmation.from,
-    // An inbound-only confirmation is by definition a portal application —
-    // "direct" would imply a sent email, which this thread does not have.
-    source:
-      extraction.source === "unknown" || extraction.source === "direct"
-        ? "ats"
-        : extraction.source,
-    appliedAt: confirmation.sentAt,
-    lastOutboundAt: confirmation.sentAt,
-    lastInboundAt,
-    lastActivityAt: ordered[ordered.length - 1]!.sentAt,
-    status,
-    followUpCount: 0,
-    confidence: extraction.confidence,
-    extractedBy: ctx.extractionModel,
-  });
-
-  await messagesRepo.upsertMany(
-    ordered.map((m) => ({
-      applicationId: app._id,
-      accountId: account._id,
-      gmailMessageId: m.gmailMessageId,
-      threadId: m.threadId,
-      direction: "inbound" as const,
-      subject: m.subject,
-      snippet: m.snippet,
-      from: m.from,
-      to: m.to,
-      sentAt: m.sentAt,
-      rfcMessageId: m.rfcMessageId,
-      references: m.references,
-      isFollowUp: false,
-    }))
-  );
-
-  return before === null;
-}
-
 /** Full thread fetch ONLY for confirmed applications — picks up inbound replies. */
 async function hydrateAndUpsert(
   ctx: SyncContext,
@@ -532,9 +330,9 @@ async function hydrateAndUpsert(
       sentAt: m.meta.sentAt,
     }))
   );
-  // No outbound message: an ATS confirmation thread (§5.4). The predicates
-  // here and in hydrateInboundOnly agree, so this cannot recurse.
-  if (!stats) return hydrateInboundOnly(ctx, extraction);
+  // No outbound message means the user never sent anything in this thread
+  // (e.g. a no-reply portal notification) — not an application they made.
+  if (!stats) return false;
 
   // Reply classification (phase 8): classify the latest inbound reply.
   let replyClassification: "positive" | "rejection" | "neutral" | null = null;

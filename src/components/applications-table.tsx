@@ -168,6 +168,20 @@ export function ApplicationsTable({
         cell: ({ row }) => fmtDate(row.original.lastActivityAt),
       },
       {
+        id: "thread",
+        header: "",
+        cell: ({ row }) => (
+          <button
+            className="rounded px-1.5 py-0.5 text-xs text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700"
+            onClick={() => toggleExpand(row.original.id)}
+            data-testid={`expand-row-${row.index}`}
+            title={expanded === row.original.id ? "Hide thread" : "Show thread"}
+          >
+            {expanded === row.original.id ? "▾ thread" : "▸ thread"}
+          </button>
+        ),
+      },
+      {
         id: "open",
         header: "",
         cell: ({ row }) => (
@@ -180,7 +194,7 @@ export function ApplicationsTable({
         ),
       },
     ],
-    [sortBy, sortDir] // toggleSort is stable enough for this table's lifetime
+    [sortBy, sortDir, expanded] // toggleSort is stable enough for this table's lifetime
   );
 
   const table = useReactTable({
@@ -261,46 +275,52 @@ export function ApplicationsTable({
                     </td>
                   ))}
                 </tr>
-                <tr>
-                  <td colSpan={columns.length} className="p-0">
-                    <button
-                      className="w-full py-0.5 text-center text-xs text-neutral-400 hover:text-neutral-700"
-                      onClick={() => toggleExpand(row.original.id)}
-                      data-testid={`expand-row-${row.index}`}
-                    >
-                      {expanded === row.original.id ? "▲ hide thread" : "▼ thread"}
-                    </button>
-                    {expanded === row.original.id ? (
-                      <div className="space-y-2 bg-neutral-50 px-6 py-3">
+                {expanded === row.original.id ? (
+                  <tr>
+                    <td colSpan={columns.length} className="p-0">
+                      <div className="space-y-2 border-y border-neutral-200 bg-neutral-50 px-6 py-3">
                         {(threads[row.original.id] ?? []).map((m) => (
-                          <div key={m.id} className="flex gap-3 text-xs">
-                            <span
-                              className={`w-16 shrink-0 font-medium ${
-                                m.direction === "outbound"
-                                  ? "text-blue-700"
-                                  : "text-green-700"
-                              }`}
-                            >
-                              {m.direction === "outbound" ? "You →" : "← Them"}
-                            </span>
-                            <span className="w-24 shrink-0 text-neutral-500">
-                              {fmtDate(m.sentAt)}
-                            </span>
-                            <span className="truncate">
-                              <strong>{m.subject}</strong> — {m.snippet}
+                          <div
+                            key={m.id}
+                            className="rounded-md border border-neutral-200 bg-white px-3 py-2 text-xs"
+                          >
+                            <div className="mb-1 flex items-center gap-2">
+                              <span
+                                className={`rounded-full px-2 py-0.5 font-medium ${
+                                  m.direction === "outbound"
+                                    ? "bg-blue-50 text-blue-700"
+                                    : "bg-green-50 text-green-700"
+                                }`}
+                              >
+                                {m.direction === "outbound" ? "You" : "Them"}
+                              </span>
+                              <span className="text-neutral-500">
+                                {fmtDate(m.sentAt)}
+                              </span>
                               {m.isFollowUp ? (
-                                <em className="ml-2 text-amber-700">follow-up</em>
+                                <em className="text-amber-700">follow-up</em>
                               ) : null}
-                            </span>
+                            </div>
+                            <p className="font-medium text-neutral-800">
+                              {m.subject}
+                            </p>
+                            <p className="mt-0.5 line-clamp-2 text-neutral-500">
+                              {m.snippet}
+                            </p>
                           </div>
                         ))}
                         {!threads[row.original.id] ? (
                           <p className="text-xs text-neutral-400">Loading…</p>
                         ) : null}
+                        {threads[row.original.id]?.length === 0 ? (
+                          <p className="text-xs text-neutral-400">
+                            No messages stored for this application.
+                          </p>
+                        ) : null}
                       </div>
-                    ) : null}
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                ) : null}
               </Fragment>
             ))}
             {applications.length === 0 ? (

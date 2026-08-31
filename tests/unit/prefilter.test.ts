@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { atsInboxQuery, looksLikeApplication } from "@/domain/prefilter";
+import { looksLikeApplication } from "@/domain/prefilter";
 
 const base = { subject: "", snippet: "", to: ["someone@example.com"] };
 
@@ -83,14 +83,32 @@ describe("looksLikeApplication", () => {
     // "jobs" as substring of another word must not match ("job" is bounded)
     expect(looksLikeApplication({ ...base, subject: "storjobsx" })).toBe(false);
   });
-});
 
-describe("atsInboxQuery", () => {
-  it("builds an inbox query over all ATS sender domains", () => {
-    const q = atsInboxQuery("after:2026/01/01 before:2026/02/01");
-    expect(q).toContain("in:inbox");
-    expect(q).toContain("from:greenhouse.io");
-    expect(q).toContain("from:lever.co");
-    expect(q).toContain("after:2026/01/01 before:2026/02/01");
+  it("rejects mail addressed only to no-reply/notification boxes", () => {
+    for (const addr of [
+      "no-reply@naukri.com",
+      "noreply@linkedin.com",
+      "donotreply@company.com",
+      "notifications@hirist.com",
+      "jobalerts@naukri.com",
+    ]) {
+      expect(
+        looksLikeApplication({
+          ...base,
+          subject: "Your job application update",
+          to: [addr],
+        })
+      ).toBe(false);
+    }
+  });
+
+  it("still accepts application mail when a real recipient is present", () => {
+    expect(
+      looksLikeApplication({
+        ...base,
+        subject: "Application for Backend Engineer",
+        to: ["hr@acme.com", "no-reply@ats.acme.com"],
+      })
+    ).toBe(true);
   });
 });
