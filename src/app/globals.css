@@ -4,6 +4,16 @@
   color-scheme: light;
 }
 
+/*
+ * Reserve scrollbar-width gutters on BOTH viewport edges so content stays
+ * centered and never shifts when the vertical scrollbar appears/disappears
+ * (e.g. flipping between pages of different heights). The scrollbar, when
+ * present, renders inside the reserved right-hand gutter.
+ */
+html {
+  scrollbar-gutter: stable both-edges;
+}
+
 body {
   @apply bg-neutral-50 text-neutral-900 antialiased;
 }
