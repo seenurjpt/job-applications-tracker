@@ -6,7 +6,7 @@
 import { detectFollowUps, type ThreadMessage } from "./follow-up";
 
 export interface ThreadStats {
-  /** First outbound message — the application itself. */
+  /** First outbound message , the application itself. */
   appliedAt: Date;
   lastOutboundAt: Date;
   lastInboundAt: Date | null;
@@ -17,7 +17,7 @@ export interface ThreadStats {
 }
 
 /**
- * Returns null when the thread has no outbound message — such a thread cannot
+ * Returns null when the thread has no outbound message , such a thread cannot
  * be an application the user sent.
  */
 export function assembleThread(messages: ThreadMessage[]): ThreadStats | null {

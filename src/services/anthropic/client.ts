@@ -7,7 +7,7 @@ import type { UserApiKey } from "@/db/schemas";
 
 // There is deliberately no module-level client here. Do not add one.
 // A cached module-scope client serves one user's key to another user's
-// request — the most severe bug this architecture can produce (§0.8).
+// request , the most severe bug this architecture can produce (§0.8).
 
 export type KeyErrorCode =
   | "missing"
@@ -25,7 +25,7 @@ export async function anthropicFor(
   if (rec.status === "invalid") return err("invalid");
   if (rec.status === "no_credit") return err("no_credit");
 
-  // maxRetries: 0 — retries are handled by ONE explicit policy in call.ts
+  // maxRetries: 0 , retries are handled by ONE explicit policy in call.ts
   // (backoff + jitter + retry-after + key-failure mapping, §6.5/§6.7), not
   // duplicated inside the SDK where throttling would be invisible.
   return ok({

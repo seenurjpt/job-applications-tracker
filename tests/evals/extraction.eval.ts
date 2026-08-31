@@ -1,7 +1,7 @@
 // Extraction accuracy eval. Run: pnpm eval:extraction
-// NOT part of the normal test run — costs money and is non-deterministic.
+// NOT part of the normal test run , costs money and is non-deterministic.
 // Run on prompt changes and model upgrades; append the printed scores line to
-// tests/evals/scores.jsonl — that history is the regression detector.
+// tests/evals/scores.jsonl , that history is the regression detector.
 
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";

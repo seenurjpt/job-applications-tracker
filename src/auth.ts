@@ -6,7 +6,7 @@ import { env } from "@/lib/env";
 import * as users from "@/db/repositories/users";
 
 // Login OAuth is deliberately separate from the Gmail-scopes OAuth flow
-// (/api/gmail/connect) — login asks only for identity, never restricted scopes.
+// (/api/gmail/connect) , login asks only for identity, never restricted scopes.
 
 const providers = [
   Google({

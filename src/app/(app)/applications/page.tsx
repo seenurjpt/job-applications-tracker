@@ -69,7 +69,7 @@ export default async function ApplicationsPage({
         <h1 className="text-2xl font-semibold">Applications</h1>
         <div className="flex items-center gap-4 text-sm text-neutral-500">
           <span>{total} total</span>
-          <a href="/api/export/applications" className="underline hover:text-neutral-900">
+          <a href="/api/export/applications" className="text-indigo-600 hover:text-indigo-800 hover:underline">
             Export CSV
           </a>
         </div>

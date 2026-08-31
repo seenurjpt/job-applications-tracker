@@ -31,7 +31,7 @@ beforeAll(async () => {
   const db = client.db("test");
   setDbForTests(db);
   await ensureIndexes(db);
-  // catch forgotten mocks — a test must never hit a real API
+  // catch forgotten mocks , a test must never hit a real API
   server.listen({ onUnhandledRequest: "error" });
   setLogSinkForTests((_level, line) => logLines.push(line));
 });

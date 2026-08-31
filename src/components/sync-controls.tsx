@@ -32,7 +32,7 @@ function idTimestamp(id: string): number {
 
 /**
  * Live view of a queued/running job: ticking elapsed time, periodic refresh
- * of the server-held stats, and stall recovery — when the heartbeat (persisted
+ * of the server-held stats, and stall recovery , when the heartbeat (persisted
  * in MongoDB with the page cursor) goes silent, the job's runner died, so we
  * resume it from where it stopped. No browser storage involved: the server is
  * the source of truth, so this works after refreshes and reconnects alike.
@@ -63,7 +63,7 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
     setResumeError(null);
     const res = await resumeSync({ jobId: job.id });
     setResuming(false);
-    // "job_still_active" means the runner was alive after all — just refresh.
+    // "job_still_active" means the runner was alive after all , just refresh.
     if (!res.ok && res.error !== "job_still_active") {
       setResumeError(res.error);
     }
@@ -86,7 +86,7 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
         data-testid="sync-resuming"
       >
         <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-600" />
-        Sync was interrupted — resuming from where it stopped…
+        Sync was interrupted , resuming from where it stopped…
       </div>
     );
   }
@@ -94,8 +94,8 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-3 text-sm text-neutral-600">
-        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-blue-600" />
-        Sync {job.status} — {job.stats.listed} listed, {job.stats.classified}{" "}
+        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
+        Sync {job.status} , {job.stats.listed} listed, {job.stats.classified}{" "}
         classified, {job.stats.applications} applications found.
         {startedMs !== null ? (
           <span className="tabular-nums text-neutral-500" data-testid="sync-elapsed">
@@ -148,7 +148,7 @@ export function SyncControls({
       const res = await estimateBackfill({ accountId, preset });
       setEstimate(
         res.ok
-          ? `About ${res.messages} sent messages in range — the free prefilter drops most; expect roughly ${res.approxRequests} classification request${res.approxRequests === 1 ? "" : "s"} to your Anthropic account.`
+          ? `About ${res.messages} sent messages in range , the free prefilter drops most; expect roughly ${res.approxRequests} classification request${res.approxRequests === 1 ? "" : "s"} to your Anthropic account.`
           : "Could not estimate right now."
       );
     });
@@ -165,7 +165,7 @@ export function SyncControls({
     return (
       <div className="flex items-center gap-3" data-testid="sync-paused">
         <span className="text-sm text-amber-700">
-          Sync paused ({activeJob.pausedReason ?? "unknown reason"}) — it will
+          Sync paused ({activeJob.pausedReason ?? "unknown reason"}) , it will
           continue from where it stopped.
         </span>
         <Button

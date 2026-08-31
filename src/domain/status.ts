@@ -1,6 +1,6 @@
 // PURE. No I/O, no db, no framework imports.
 // The status union is declared locally so the domain layer has zero imports
-// from db/. It must stay assignable to ApplicationStatus in db/schemas.ts —
+// from db/. It must stay assignable to ApplicationStatus in db/schemas.ts ,
 // a unit test asserts the two stay in sync.
 
 export type DerivedApplicationStatus =

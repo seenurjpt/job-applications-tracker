@@ -121,7 +121,7 @@ describe("bulk drafts (phase 6)", () => {
     expect(okRows).toHaveLength(19);
     expect(failedRows).toHaveLength(1);
 
-    // The failure is recorded and retryable — not a rollback.
+    // The failure is recorded and retryable , not a rollback.
     const db = client.db("test");
     const drafts = await db.collection<Draft>("drafts").find().toArray();
     expect(drafts.filter((d) => d.status === "created")).toHaveLength(19);
@@ -129,7 +129,7 @@ describe("bulk drafts (phase 6)", () => {
     expect(failed).toHaveLength(1);
     expect(failed[0]!.error).toBeTruthy();
 
-    // Retry just the failed row — now it succeeds.
+    // Retry just the failed row , now it succeeds.
     fixture.failDraftCreateAt = null;
     const retry = await bulkCreate(user._id, [{ draftId: failed[0]!._id }]);
     expect(retry[0]!.ok).toBe(true);

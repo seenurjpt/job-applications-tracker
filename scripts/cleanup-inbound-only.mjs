@@ -1,7 +1,7 @@
-// One-off cleanup: deletes applications that have NO outbound message —
+// One-off cleanup: deletes applications that have NO outbound message ,
 // rows created from no-reply/notification emails by the removed inbox ATS
 // pass. Their messages and drafts are removed too. Run with:
-//   node scripts/cleanup-inbound-only.mjs           (dry run — lists only)
+//   node scripts/cleanup-inbound-only.mjs           (dry run , lists only)
 //   node scripts/cleanup-inbound-only.mjs --delete  (actually deletes)
 import fs from "node:fs";
 import { MongoClient } from "mongodb";
@@ -33,7 +33,7 @@ for (const a of toDelete)
   console.log(`  - ${a.company ?? "?"} / ${a.role ?? "?"} (${a.contactEmail ?? "no contact"})`);
 
 if (!doDelete) {
-  console.log("\nDry run — nothing deleted. Re-run with --delete to remove these.");
+  console.log("\nDry run , nothing deleted. Re-run with --delete to remove these.");
 } else if (toDelete.length > 0) {
   const ids = toDelete.map((a) => a._id);
   const dm = await db.collection("messages").deleteMany({ applicationId: { $in: ids } });

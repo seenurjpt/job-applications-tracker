@@ -1,5 +1,5 @@
 // Eval bootstrap. Evals hit the REAL Anthropic API using ANTHROPIC_API_KEY_DEV
-// — the only place in the codebase that variable is read (§8.5). They cost
+// , the only place in the codebase that variable is read (§8.5). They cost
 // money and are non-deterministic: run on prompt/model changes, not in CI.
 
 process.env.MONGODB_URI ??= "mongodb://localhost:27017/unused";

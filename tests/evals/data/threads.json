@@ -37,7 +37,7 @@
     "input": {
       "threadId": "pos-2",
       "subject": "Re: Application for Data Analyst",
-      "snippet": "Following up on my application from two weeks ago — happy to provide anything else you need.",
+      "snippet": "Following up on my application from two weeks ago , happy to provide anything else you need.",
       "to": [
         "hr@brightpath.co"
       ],
@@ -53,7 +53,7 @@
   {
     "input": {
       "threadId": "pos-3",
-      "subject": "Software Engineer II — application",
+      "subject": "Software Engineer II , application",
       "snippet": "Submitting my application for Software Engineer II as advertised on your careers page.",
       "to": [
         "talent@corvid.systems"
@@ -87,7 +87,7 @@
   {
     "input": {
       "threadId": "pos-5",
-      "subject": "Frontend Engineer application — Halcyon",
+      "subject": "Frontend Engineer application , Halcyon",
       "snippet": "Thank you for confirming receipt. Attaching my portfolio as requested for the Frontend Engineer role.",
       "to": [
         "apply@jobs.halcyon.dev"
@@ -121,7 +121,7 @@
   {
     "input": {
       "threadId": "pos-7",
-      "subject": "Lattice Robotics — Machine Learning Engineer application",
+      "subject": "Lattice Robotics , Machine Learning Engineer application",
       "snippet": "Submitted via Lever: my application for Machine Learning Engineer at Lattice Robotics.",
       "to": [
         "applications@hire.lever.co"
@@ -155,7 +155,7 @@
   {
     "input": {
       "threadId": "pos-9",
-      "subject": "Re: Ashby application — QA Lead, Sundial",
+      "subject": "Re: Ashby application , QA Lead, Sundial",
       "snippet": "Adding a note to my Ashby application for the QA Lead position at Sundial.",
       "to": [
         "sundial@ashbyhq.com"
@@ -172,7 +172,7 @@
   {
     "input": {
       "threadId": "pos-10",
-      "subject": "Referred by Priya — Platform Engineer role",
+      "subject": "Referred by Priya , Platform Engineer role",
       "snippet": "Priya Raman suggested I reach out about the Platform Engineer opening on your team at Coldbrook.",
       "to": [
         "dev-hiring@coldbrook.io"
@@ -189,7 +189,7 @@
   {
     "input": {
       "threadId": "pos-11",
-      "subject": "Introduction from Marcus — applying for Sales Lead",
+      "subject": "Introduction from Marcus , applying for Sales Lead",
       "snippet": "Marcus passed along your address; I'd like to formally apply for the Sales Lead role at Riverstone.",
       "to": [
         "olivia@riverstone.com"
@@ -223,7 +223,7 @@
   {
     "input": {
       "threadId": "pos-13",
-      "subject": "Following up — Security Engineer application",
+      "subject": "Following up , Security Engineer application",
       "snippet": "Checking in on the status of my Security Engineer application from March 3rd.",
       "to": [
         "security-jobs@oakhaven.net"
@@ -240,7 +240,7 @@
   {
     "input": {
       "threadId": "pos-14",
-      "subject": "Candidature — Ingénieur logiciel",
+      "subject": "Candidature , Ingénieur logiciel",
       "snippet": "Veuillez trouver ci-joint mon CV pour le poste d'ingénieur logiciel chez Verdier SA.",
       "to": [
         "rh@verdier.fr"
@@ -274,7 +274,7 @@
   {
     "input": {
       "threadId": "pos-16",
-      "subject": "Re: Re: Application — Site Reliability Engineer",
+      "subject": "Re: Re: Application , Site Reliability Engineer",
       "snippet": "Thanks for the quick reply! Answers to your questions about my SRE application below.",
       "to": [
         "sre-hiring@tundra.cloud"
@@ -291,7 +291,7 @@
   {
     "input": {
       "threadId": "pos-17",
-      "subject": "Junior Accountant opening — my application",
+      "subject": "Junior Accountant opening , my application",
       "snippet": "I would like to apply for the Junior Accountant vacancy listed on Naukri.",
       "to": [
         "careers@shardul.in"
@@ -325,7 +325,7 @@
   {
     "input": {
       "threadId": "pos-19",
-      "subject": "Growth PM role — application + portfolio",
+      "subject": "Growth PM role , application + portfolio",
       "snippet": "Applying for the Growth PM role; my portfolio covers the experiments I ran at my current company.",
       "to": [
         "people@daybreak.so"
@@ -343,7 +343,7 @@
     "input": {
       "threadId": "neg-0",
       "subject": "Your weekly job alert: 45 new engineer roles",
-      "snippet": "LinkedIn job alerts — Software Engineer roles near you.",
+      "snippet": "LinkedIn job alerts , Software Engineer roles near you.",
       "to": [
         "me@example.com"
       ],
@@ -377,7 +377,7 @@
     "input": {
       "threadId": "neg-2",
       "subject": "Re: Dinner Friday?",
-      "snippet": "8pm works — see you at the usual place.",
+      "snippet": "8pm works , see you at the usual place.",
       "to": [
         "sam.friend@gmail.com"
       ],
@@ -393,7 +393,7 @@
   {
     "input": {
       "threadId": "neg-3",
-      "subject": "Invoice #2291 — March services",
+      "subject": "Invoice #2291 , March services",
       "snippet": "Attached is the invoice for March consulting services.",
       "to": [
         "accounts@clientco.com"
@@ -411,7 +411,7 @@
     "input": {
       "threadId": "neg-4",
       "subject": "Quick question about your open role",
-      "snippet": "Hi! I'm a recruiter at TalentBridge — are you open to new opportunities? We have clients hiring engineers.",
+      "snippet": "Hi! I'm a recruiter at TalentBridge , are you open to new opportunities? We have clients hiring engineers.",
       "to": [
         "me@example.com"
       ],
@@ -462,7 +462,7 @@
     "input": {
       "threadId": "neg-7",
       "subject": "Newsletter draft for review",
-      "snippet": "Here's the April newsletter draft — the hiring section still needs numbers.",
+      "snippet": "Here's the April newsletter draft , the hiring section still needs numbers.",
       "to": [
         "team@myside.dev"
       ],
@@ -496,7 +496,7 @@
     "input": {
       "threadId": "neg-9",
       "subject": "Resume review notes for Jordan",
-      "snippet": "As promised, my feedback on your resume — the summary section needs tightening. Good luck applying!",
+      "snippet": "As promised, my feedback on your resume , the summary section needs tightening. Good luck applying!",
       "to": [
         "jordan.mentee@gmail.com"
       ],
@@ -530,7 +530,7 @@
     "input": {
       "threadId": "neg-11",
       "subject": "Speaking opportunity at DevSummit",
-      "snippet": "Thanks for the invite — I'd love to give the talk on job queue design.",
+      "snippet": "Thanks for the invite , I'd love to give the talk on job queue design.",
       "to": [
         "speakers@devsummit.io"
       ],
@@ -547,7 +547,7 @@
     "input": {
       "threadId": "neg-12",
       "subject": "Re: Reference for Maya",
-      "snippet": "Happy to be a reference for Maya's application to your team — she's excellent.",
+      "snippet": "Happy to be a reference for Maya's application to your team , she's excellent.",
       "to": [
         "hiring@somestartup.com"
       ],
@@ -598,7 +598,7 @@
     "input": {
       "threadId": "neg-15",
       "subject": "Team offsite planning",
-      "snippet": "Poll for offsite dates — also we should discuss the open headcount and hiring plan.",
+      "snippet": "Poll for offsite dates , also we should discuss the open headcount and hiring plan.",
       "to": [
         "team@myside.dev"
       ],
@@ -614,7 +614,7 @@
   {
     "input": {
       "threadId": "neg-16",
-      "subject": "Re: Your candidacy — scheduling",
+      "subject": "Re: Your candidacy , scheduling",
       "snippet": "Confirming Thursday 11am for the phone screen. Dial-in below.",
       "to": [
         "scheduling@recruitco.com"
@@ -649,7 +649,7 @@
     "input": {
       "threadId": "neg-18",
       "subject": "Beta access request",
-      "snippet": "I'd love early access to the API — happy to share feedback.",
+      "snippet": "I'd love early access to the API , happy to share feedback.",
       "to": [
         "beta@newtool.ai"
       ],

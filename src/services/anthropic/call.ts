@@ -9,7 +9,7 @@ import {
   type KeyFailure,
 } from "./errors";
 
-/** Thrown when the user's key itself is the problem — the sync must PAUSE. */
+/** Thrown when the user's key itself is the problem , the sync must PAUSE. */
 export class AnthropicKeyError extends Error {
   constructor(public readonly kind: KeyFailure) {
     super(`Anthropic key failure: ${kind}`);
@@ -26,7 +26,7 @@ export const MAX_API_RETRIES = 5;
  * caller pauses at its cursor rather than failing.
  *
  * Retries live HERE, not in the SDK client (clients are constructed with
- * maxRetries: 0) — one retry layer, one policy, and it keeps throttling
+ * maxRetries: 0) , one retry layer, one policy, and it keeps throttling
  * observable as progress information instead of vanishing inside the SDK.
  */
 export async function createMessageWithRetries(

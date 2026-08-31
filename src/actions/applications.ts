@@ -49,7 +49,7 @@ export async function getApplicationThread(input: unknown) {
 /**
  * On-demand backfill: classify "what did I mail them about" for applications
  * that predate the intent field. Uses stored subject+snippet of the latest
- * outbound message — no Gmail calls — billed to the user's own key in
+ * outbound message , no Gmail calls , billed to the user's own key in
  * batches of 10.
  */
 export async function analyzeIntents() {
@@ -102,7 +102,7 @@ export async function analyzeIntents() {
 
 /**
  * Full body of one thread message, fetched live from Gmail for display.
- * Never stored and never sent to Anthropic — the metadata-only posture
+ * Never stored and never sent to Anthropic , the metadata-only posture
  * applies to storage and third-party transfer, not to showing the user
  * their own mail.
  */

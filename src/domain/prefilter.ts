@@ -1,7 +1,7 @@
 // PURE. No I/O, no db, no framework imports.
 //
 // Runs before any Anthropic call. Kills 80–90% of sent mail for free.
-// Cheap and recall-oriented — a false positive costs a fraction of a cent,
+// Cheap and recall-oriented , a false positive costs a fraction of a cent,
 // a false negative loses an application permanently.
 
 const POSITIVE =
@@ -51,7 +51,7 @@ export function looksLikeApplication(m: {
   to: string[];
 }): boolean {
   // Mail addressed only to no-reply/notification boxes is never an
-  // application the user made — it's a reply to automated mail.
+  // application the user made , it's a reply to automated mail.
   if (
     m.to.length > 0 &&
     m.to.every((addr) => NO_REPLY_LOCAL_PART.test(localPartOf(addr)))

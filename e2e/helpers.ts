@@ -46,7 +46,7 @@ export async function runSyncFromDashboard(page: Page): Promise<void> {
   const button = page.getByTestId("start-sync");
   await expect(button).toBeEnabled({ timeout: 30_000 });
   await button.click();
-  // E2E mode runs the backfill inline inside the action — when the page
+  // E2E mode runs the backfill inline inside the action , when the page
   // settles the sync is done.
   await expect(page.getByTestId("start-sync")).toBeEnabled({ timeout: 60_000 });
 }

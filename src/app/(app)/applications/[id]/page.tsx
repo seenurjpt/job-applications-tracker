@@ -75,7 +75,7 @@ export default async function ApplicationDetailPage({
             <div>
               <dt className="text-neutral-500">Contact</dt>
               <dd>
-                {dto.contactName ?? "—"}{" "}
+                {dto.contactName ?? "-"}{" "}
                 {dto.contactEmail ? `<${dto.contactEmail}>` : ""}
               </dd>
             </div>
@@ -124,7 +124,7 @@ export default async function ApplicationDetailPage({
                     : dd.status === "failed"
                       ? `✗ Failed (${dd.error})`
                       : "Generated"}{" "}
-                  — {dd.subject} ({dd.tone})
+                  , {dd.subject} ({dd.tone})
                 </p>
               );
             })}

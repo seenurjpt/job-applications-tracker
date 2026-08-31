@@ -29,7 +29,7 @@ const KEY_BANNER_COPY: Partial<Record<KeyStatusValue, { title: string; hint: str
   },
   no_credit: {
     title: "Your Anthropic account can't be billed.",
-    hint: "Add credit to your Anthropic account, then resume the sync — it continues from where it stopped.",
+    hint: "Add credit to your Anthropic account, then resume the sync , it continues from where it stopped.",
   },
   no_access: {
     title: "Your key has no access to the selected model.",

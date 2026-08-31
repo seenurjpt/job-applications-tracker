@@ -66,7 +66,7 @@ export default async function OnboardingPage({
       {gmailError ? (
         <div className="rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-900">
           {gmailError === "partial_scopes"
-            ? "Gmail connection is incomplete — please grant BOTH the read and compose permissions. The app cannot work with only one of them."
+            ? "Gmail connection is incomplete , please grant BOTH the read and compose permissions. The app cannot work with only one of them."
             : `Gmail connection failed (${gmailError}). Please try again.`}
         </div>
       ) : null}
@@ -74,7 +74,7 @@ export default async function OnboardingPage({
       <Card>
         <ol className="space-y-6">
           <Step n={1} done title="Sign in with Google">
-            Done — you&apos;re signed in.
+            Done , you&apos;re signed in.
           </Step>
           <Step n={2} done={gmailConnected} title="Connect your Gmail">
             <p>
@@ -85,7 +85,7 @@ export default async function OnboardingPage({
               <a
                 href="/api/gmail/connect"
                 data-testid="connect-gmail"
-                className="mt-2 inline-block rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-neutral-700"
+                className="mt-2 inline-block rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
               >
                 Connect Gmail
               </a>
@@ -94,14 +94,14 @@ export default async function OnboardingPage({
           <Step n={3} done={keyValid} title="Add your Anthropic API key">
             <p>
               Classification runs on your own Anthropic account. A six-month
-              backfill is only a few hundred small requests on short metadata —
+              backfill is only a few hundred small requests on short metadata ,
               typically well under a dollar.
             </p>
             {!keyValid ? (
               <Link
                 href="/settings/api-key"
                 data-testid="add-api-key"
-                className="mt-2 inline-block rounded-md bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-neutral-700"
+                className="mt-2 inline-block rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
               >
                 Add API key
               </Link>

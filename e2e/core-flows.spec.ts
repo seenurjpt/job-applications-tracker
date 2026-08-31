@@ -130,7 +130,7 @@ test("an inline company edit survives a subsequent sync", async ({ page, request
     "Alpha Cooperative (edited)"
   );
 
-  // Sync again — the edit must survive (userEditedFields).
+  // Sync again , the edit must survive (userEditedFields).
   await runSyncFromDashboard(page);
   await page.goto("/applications");
   await expect(page.getByTestId("applications-table")).toContainText(

@@ -22,7 +22,7 @@ export function Button({
         "disabled:pointer-events-none disabled:opacity-50",
         size === "default" ? "h-9 px-4 text-sm" : "h-8 px-3 text-xs",
         variant === "default" &&
-          "bg-neutral-900 text-white hover:bg-neutral-700",
+          "bg-indigo-600 text-white hover:bg-indigo-700",
         variant === "outline" &&
           "border border-neutral-300 bg-white hover:bg-neutral-100",
         variant === "ghost" && "hover:bg-neutral-100",
@@ -42,7 +42,7 @@ export function Input({
     <input
       className={cn(
         "h-9 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm",
-        "focus:outline-none focus:ring-2 focus:ring-neutral-400",
+        "focus:outline-none focus:ring-2 focus:ring-indigo-500",
         className
       )}
       {...props}
@@ -58,7 +58,7 @@ export function Select({
     <select
       className={cn(
         "h-9 rounded-md border border-neutral-300 bg-white px-2 text-sm",
-        "focus:outline-none focus:ring-2 focus:ring-neutral-400",
+        "focus:outline-none focus:ring-2 focus:ring-indigo-500",
         className
       )}
       {...props}

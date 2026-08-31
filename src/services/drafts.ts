@@ -177,7 +177,7 @@ export async function bulkGenerate(
 /**
  * Queue Gmail draft creation at concurrency 3–5 (drafts.create costs 10 quota
  * units against a 250 units/sec per-user limit). One failing row leaves the
- * other rows created and retryable — no total rollback (§ phase 6).
+ * other rows created and retryable , no total rollback (§ phase 6).
  */
 export async function bulkCreate(
   userId: ObjectId,

@@ -42,13 +42,13 @@ function fmtDate(iso: string): string {
 const INTENT_BADGE: Record<string, { label: string; className: string }> = {
   application: { label: "Applied", className: "bg-neutral-100 text-neutral-700" },
   follow_up: { label: "Follow-up", className: "bg-amber-50 text-amber-700" },
-  interview: { label: "Interview", className: "bg-blue-50 text-blue-700" },
+  interview: { label: "Interview", className: "bg-indigo-50 text-indigo-700" },
   negotiation: { label: "Negotiation", className: "bg-purple-50 text-purple-700" },
   other: { label: "Other", className: "bg-neutral-100 text-neutral-500" },
 };
 
 function IntentBadge({ intent }: { intent: string | null }) {
-  if (!intent) return <span className="text-neutral-300">—</span>;
+  if (!intent) return <span className="text-neutral-300">,</span>;
   const b = INTENT_BADGE[intent] ?? INTENT_BADGE.other!;
   return (
     <span
@@ -214,7 +214,7 @@ export function ApplicationsTable({
         cell: ({ row }) => (
           <Link
             href={`/applications/${row.original.id}`}
-            className="text-sm underline hover:text-neutral-600"
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline"
           >
             Open
           </Link>
@@ -272,7 +272,7 @@ export function ApplicationsTable({
         />
         {applications.some((a) => !a.mailIntent) ? (
           <button
-            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 disabled:opacity-50"
+            className="rounded-md border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-700 hover:bg-indigo-100 disabled:opacity-50"
             data-testid="analyze-intents"
             disabled={analyzing}
             onClick={async () => {
@@ -348,7 +348,7 @@ export function ApplicationsTable({
                               <span
                                 className={`rounded-full px-2 py-0.5 font-medium ${
                                   m.direction === "outbound"
-                                    ? "bg-blue-50 text-blue-700"
+                                    ? "bg-indigo-50 text-indigo-700"
                                     : "bg-green-50 text-green-700"
                                 }`}
                               >

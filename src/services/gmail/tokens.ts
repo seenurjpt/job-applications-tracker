@@ -31,8 +31,8 @@ export type TokenError = "needs_reconnect" | "revoked";
 /**
  * Returns a valid access token, refreshing if within 5 minutes of expiry.
  *
- * invalid_grant — the 7-day testing expiry, user revocation, or a password
- * reset — is a STATE, not an error (§0.4): the account flips to
+ * invalid_grant , the 7-day testing expiry, user revocation, or a password
+ * reset , is a STATE, not an error (§0.4): the account flips to
  * needs_reconnect and callers get a typed err, never an exception.
  */
 export async function getValidAccessToken(

@@ -4,7 +4,7 @@ import { gmailFetch } from "./client";
  * Builds an RFC 2822 message, base64URL-encoded for the Gmail API.
  *
  * A draft without In-Reply-To and References appears as a detached message
- * rather than a reply — the single most common Gmail API mistake (§5.6).
+ * rather than a reply , the single most common Gmail API mistake (§5.6).
  */
 export function buildRawMessage(input: {
   to: string;
@@ -53,7 +53,7 @@ function encodeHeader(value: string): string {
 
 /**
  * Creates a Gmail draft attached to a thread. Both threadId AND the RFC
- * headers are required — threadId alone is not enough.
+ * headers are required , threadId alone is not enough.
  */
 export async function createDraft(
   accessToken: string,

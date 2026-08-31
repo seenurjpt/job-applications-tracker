@@ -7,3 +7,14 @@
 body {
   @apply bg-neutral-50 text-neutral-900 antialiased;
 }
+
+/* Brand accent for native controls (checkboxes, radios, progress). */
+input[type="checkbox"],
+input[type="radio"],
+progress {
+  accent-color: var(--color-indigo-600);
+}
+
+::selection {
+  background: var(--color-indigo-100);
+}

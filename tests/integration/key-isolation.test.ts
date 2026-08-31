@@ -1,4 +1,4 @@
-// BYO-key tests — these are security tests, not feature tests (§8.2).
+// BYO-key tests , these are security tests, not feature tests (§8.2).
 
 import { describe, it, expect } from "vitest";
 import { fixture, logLines } from "./setup";
@@ -42,7 +42,7 @@ async function extractFor(userId: ObjectId) {
   );
 }
 
-describe("cross-user key isolation — the one that matters", () => {
+describe("cross-user key isolation , the one that matters", () => {
   it("never sends one user's key on another user's request", async () => {
     const a = await seedUser("a@example.com");
     const b = await seedUser("b@example.com");

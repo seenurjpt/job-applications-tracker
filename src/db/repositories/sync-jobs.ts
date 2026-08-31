@@ -79,7 +79,7 @@ export async function addStats(
   await col().updateOne({ _id: id }, update);
 }
 
-/** §6.5: pause, never fail — keeps pageToken so Resume avoids double billing. */
+/** §6.5: pause, never fail , keeps pageToken so Resume avoids double billing. */
 export async function pause(id: ObjectId, reason: string): Promise<void> {
   await col().updateOne(
     { _id: id },
@@ -117,7 +117,7 @@ export async function requeueForResume(id: ObjectId): Promise<void> {
 
 /**
  * Atomically reclaims a queued/running job whose runner died (page refresh
- * killed nothing — the server keeps going — but a crash, redeploy, or
+ * killed nothing , the server keeps going , but a crash, redeploy, or
  * serverless timeout stops the heartbeat). Only claims when the heartbeat
  * (or, for never-started jobs, the creation time embedded in the ObjectId)
  * is older than `staleBefore`, so a live runner is never duplicated.

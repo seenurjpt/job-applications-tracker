@@ -64,7 +64,7 @@ export function ThreadTimeline({
             <div className="flex gap-3">
               <span
                 className={`w-16 shrink-0 font-medium ${
-                  m.direction === "outbound" ? "text-blue-700" : "text-green-700"
+                  m.direction === "outbound" ? "text-indigo-700" : "text-green-700"
                 }`}
               >
                 {m.direction === "outbound" ? "You →" : "← Them"}
@@ -75,7 +75,7 @@ export function ThreadTimeline({
               <span className="min-w-0">
                 <strong>{m.subject}</strong>
                 {!open[m.id] ? (
-                  <span className="text-neutral-500"> — {m.snippet}…</span>
+                  <span className="text-neutral-500"> , {m.snippet}…</span>
                 ) : null}
                 {m.isFollowUp ? (
                   <em className="ml-2 text-amber-700">follow-up</em>

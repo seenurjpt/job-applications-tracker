@@ -367,7 +367,7 @@ export function buildHandlers(fixture: ApiFixture): RequestHandler[] {
       } else if (body.system?.includes("classify replies")) {
         text = JSON.stringify({ classification: "neutral" });
       } else {
-        text = "Following up briefly on my application — happy to share anything else you need.";
+        text = "Following up briefly on my application , happy to share anything else you need.";
       }
 
       return HttpResponse.json({

@@ -7,7 +7,7 @@ const STYLES: Record<ApplicationStatusValue, { label: string; className: string 
     label: "Needs follow-up",
     className: "bg-amber-100 text-amber-800",
   },
-  replied: { label: "Replied", className: "bg-blue-100 text-blue-800" },
+  replied: { label: "Replied", className: "bg-indigo-100 text-indigo-800" },
   interviewing: {
     label: "Interviewing",
     className: "bg-green-100 text-green-800",

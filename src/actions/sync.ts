@@ -62,7 +62,7 @@ const STALL_AFTER_MS = 90_000;
 
 /**
  * Resumes a sync from its persisted cursor. Handles both paused jobs (key
- * problems, fixed by the user) and stalled ones — a crash, redeploy, or
+ * problems, fixed by the user) and stalled ones , a crash, redeploy, or
  * timeout killed the runner mid-backfill. The pageToken lives in MongoDB, so
  * resumption continues where the dead run stopped, and the classification
  * cache means a re-run page is never billed twice.
@@ -96,7 +96,7 @@ export async function resumeSync(input: unknown) {
   if (!claimed) return { ok: false as const, error: "job_still_active" };
 
   if (job.type === "incremental") {
-    // Incremental jobs are short and restartable from history — no cursor.
+    // Incremental jobs are short and restartable from history , no cursor.
     await syncJobs.cancel(jobId);
     await runIncrementalSync(account._id);
   } else {

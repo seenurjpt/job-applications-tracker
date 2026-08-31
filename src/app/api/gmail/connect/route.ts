@@ -6,7 +6,7 @@ import { currentUserId } from "@/auth";
 import { REQUIRED_SCOPES } from "@/services/gmail/tokens";
 
 /**
- * Starts the Gmail-scopes OAuth flow — separate from login OAuth (§ phase 1).
+ * Starts the Gmail-scopes OAuth flow , separate from login OAuth (§ phase 1).
  * access_type=offline + prompt=consent are required to receive a refresh token.
  */
 export async function GET(): Promise<NextResponse> {

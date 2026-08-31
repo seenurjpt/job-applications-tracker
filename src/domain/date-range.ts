@@ -52,12 +52,12 @@ export function resolveRange(
 
 /**
  * Gmail `after:`/`before:` use the MAILBOX timezone, and `before:` is
- * EXCLUSIVE — add one day to include the end date. Dates are formatted
+ * EXCLUSIVE , add one day to include the end date. Dates are formatted
  * YYYY/MM/DD in the mailbox timezone.
  */
 export function toGmailQuery(r: ResolvedRange, tz: string): string {
   const after = formatInTimeZone(r.from, tz, "yyyy/MM/dd");
-  // The +1 day must happen on the LOCAL calendar date, not the instant —
+  // The +1 day must happen on the LOCAL calendar date, not the instant ,
   // adding 24h to the instant drifts by a day across a DST transition.
   const toLocal = formatInTimeZone(r.to, tz, "yyyy-MM-dd");
   const before = formatInTimeZone(

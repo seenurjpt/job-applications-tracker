@@ -126,7 +126,7 @@ describe("backfill pipeline", () => {
     expect(second.messages).toEqual(first.messages);
     expect(second.raw).toEqual(first.raw);
 
-    // The classification cache means the rerun makes NO extraction calls —
+    // The classification cache means the rerun makes NO extraction calls ,
     // the user is never charged twice for the same threads.
     const extractionCallsInRerun = fixture
       .anthropicCalls()
@@ -148,7 +148,7 @@ describe("backfill pipeline", () => {
     }
     seedMailbox();
 
-    // Page 1 only — then the process "dies".
+    // Page 1 only , then the process "dies".
     const first = await processNextPage(job._id);
     expect(first.kind).toBe("continue");
     const midJob = await syncJobsRepo.findById(job._id);
@@ -163,7 +163,7 @@ describe("backfill pipeline", () => {
     expect(applications.map((a) => a.threadId).sort()).toEqual(["t1", "t2", "t5"]);
 
     // The resumed listing continued from offset 100, never re-listing page 1.
-    // (The final ATS inbox pass issues its own in:inbox query — excluded.)
+    // (The final ATS inbox pass issues its own in:inbox query , excluded.)
     const listCalls = fixture
       .gmailCalls()
       .filter(

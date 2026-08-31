@@ -83,7 +83,7 @@ describe("incremental sync (phase 7)", () => {
     expect(fixture.gmailCalls()).toHaveLength(0);
   });
 
-  it("skips cleanly with no usable key — and makes no Gmail calls", async () => {
+  it("skips cleanly with no usable key , and makes no Gmail calls", async () => {
     const { user, account } = await seedSyncReady();
     const { setStatus } = await import("@/db/repositories/api-keys");
     await setStatus(user._id, "invalid");
@@ -93,7 +93,7 @@ describe("incremental sync (phase 7)", () => {
   });
 
   it("falls back to a bounded backfill when no historyId is stored yet", async () => {
-    // Seed WITHOUT a queued job — the bounded backfill must create its own.
+    // Seed WITHOUT a queued job , the bounded backfill must create its own.
     const { seedUser, seedAccount, seedKey } = await import("./helpers");
     const user = await seedUser();
     const account = await seedAccount(user._id);
@@ -103,7 +103,7 @@ describe("incremental sync (phase 7)", () => {
       subject: "Application for Engineer",
       to: ["careers@acme.com"],
     });
-    // historyId is null — never synced before.
+    // historyId is null , never synced before.
     const outcome = await runIncrementalSync(account._id);
     expect(outcome).toEqual({ kind: "fell_back_to_backfill" });
     expect(await apps()).toHaveLength(1);

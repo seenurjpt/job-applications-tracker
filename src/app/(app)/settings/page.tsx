@@ -28,7 +28,7 @@ export default async function SettingsPage() {
         <p className="mb-3 text-sm text-neutral-500">
           Manage your key, model choices, and usage.
         </p>
-        <Link href="/settings/api-key" className="text-sm font-medium underline">
+        <Link href="/settings/api-key" className="text-sm font-medium text-indigo-600 hover:underline">
           API key settings →
         </Link>
       </Card>
@@ -84,7 +84,7 @@ export default async function SettingsPage() {
         {accounts.length === 0 ? (
           <p className="text-sm text-neutral-500">
             None connected.{" "}
-            <a href="/api/gmail/connect" className="underline">
+            <a href="/api/gmail/connect" className="text-indigo-600 hover:underline">
               Connect Gmail
             </a>
           </p>

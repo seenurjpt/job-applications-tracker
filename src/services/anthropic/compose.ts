@@ -16,7 +16,7 @@ export interface ComposedDraft {
 
 /**
  * Generates a follow-up email body for an application. This is user-visible
- * prose — the draft model (Sonnet by default) is worth its cost here (§6.9).
+ * prose , the draft model (Sonnet by default) is worth its cost here (§6.9).
  */
 export async function composeFollowUp(
   deps: { client: Anthropic; model: string; userId: ObjectId },
@@ -41,7 +41,7 @@ export async function composeFollowUp(
   });
 
   // createMessageWithRetries maps key failures to AnthropicKeyError and
-  // retries throttling — the same ladder the sync pipeline uses.
+  // retries throttling , the same ladder the sync pipeline uses.
   const res = await createMessageWithRetries(deps.client, {
     model: deps.model,
     max_tokens: 1024,

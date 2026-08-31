@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { editApplication } from "@/actions/applications";
 
-/** Inline edit writing userEditedFields — core feature, not polish (§11). */
+/** Inline edit writing userEditedFields , core feature, not polish (§11). */
 export function InlineEditCell({
   id,
   field,
@@ -60,12 +60,12 @@ export function InlineEditCell({
         setDraft(value ?? "");
         setEditing(true);
       }}
-      title={edited ? "Edited by you — syncs will not overwrite this" : "Click to edit"}
+      title={edited ? "Edited by you , syncs will not overwrite this" : "Click to edit"}
     >
       <span className={value ? "" : "italic text-neutral-400"}>
         {value ?? "unknown"}
       </span>
-      {edited ? <span className="text-xs text-blue-600">✎</span> : null}
+      {edited ? <span className="text-xs text-indigo-600">✎</span> : null}
     </button>
   );
 }

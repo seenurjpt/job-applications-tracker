@@ -135,7 +135,7 @@ export function startStubServer(port) {
         text = JSON.stringify({ classification: "neutral" });
       } else {
         text =
-          "Hi — I wanted to follow up on my application. I remain very interested in the role and would welcome any update on the timeline.";
+          "Hi , I wanted to follow up on my application. I remain very interested in the role and would welcome any update on the timeline.";
       }
       return json(res, 200, {
         id: "msg_e2e",

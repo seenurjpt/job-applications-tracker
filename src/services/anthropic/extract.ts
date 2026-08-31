@@ -120,7 +120,7 @@ export async function extractThreadBatch(
     logger.warn("Repair attempt failed; falling back to per-thread calls");
   }
 
-  // Per-thread fallback — a malformed response for one thread must not
+  // Per-thread fallback , a malformed response for one thread must not
   // discard the rest of the batch.
   const results: ExtractionResult[] = [];
   for (const thread of threads) {

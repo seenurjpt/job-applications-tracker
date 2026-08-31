@@ -1,6 +1,6 @@
 /**
  * Next.js boot hook: validate env and create indexes once per server start.
- * The literal NEXT_RUNTIME check is required — it lets the bundler drop the
+ * The literal NEXT_RUNTIME check is required , it lets the bundler drop the
  * node-only import (mongodb and friends) from the edge build.
  */
 export async function register(): Promise<void> {

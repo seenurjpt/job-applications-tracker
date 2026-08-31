@@ -14,15 +14,15 @@ const STATUS_COPY: Record<KeyStatusValue, { label: string; className: string }> 
   valid: { label: "Valid", className: "text-green-700" },
   unverified: { label: "Unverified", className: "text-neutral-500" },
   invalid: {
-    label: "Invalid — the key was rejected. Check for typos or generate a new key.",
+    label: "Invalid , the key was rejected. Check for typos or generate a new key.",
     className: "text-red-700",
   },
   no_credit: {
-    label: "No credit — the key works but your Anthropic account cannot be billed.",
+    label: "No credit , the key works but your Anthropic account cannot be billed.",
     className: "text-red-700",
   },
   no_access: {
-    label: "No access — this key cannot use the selected model. Pick another model.",
+    label: "No access , this key cannot use the selected model. Pick another model.",
     className: "text-red-700",
   },
 };
@@ -58,7 +58,7 @@ export function ApiKeyForm({
       setKey("");
       setMessage(
         res.unchanged
-          ? "That's the same key you already have — nothing changed."
+          ? "That's the same key you already have , nothing changed."
           : res.status === "valid"
             ? "Key verified and saved."
             : `Key saved, but verification returned: ${res.status}`

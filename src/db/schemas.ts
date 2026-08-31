@@ -28,7 +28,7 @@ export const userSchema = z.object({
 
 export const AccountStatus = z.enum([
   "active",
-  "needs_reconnect", // invalid_grant — user must re-consent
+  "needs_reconnect", // invalid_grant , user must re-consent
   "revoked",
 ]);
 
@@ -100,7 +100,7 @@ export const applicationSchema = z.object({
 
   replyClassification: z.enum(["positive", "rejection", "neutral"]).nullable().default(null),
 
-  // What the user's latest outbound mail in the thread was about — the
+  // What the user's latest outbound mail in the thread was about , the
   // at-a-glance "why did I email them" flag on the applications table.
   mailIntent: MailIntent.nullable().default(null),
 
@@ -134,7 +134,7 @@ export const messageSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
-// Raw messages (phase 2 — sent-mail metadata stored before any AI runs)
+// Raw messages (phase 2 , sent-mail metadata stored before any AI runs)
 // ---------------------------------------------------------------------------
 
 export const rawMessageSchema = z.object({
@@ -152,7 +152,7 @@ export const rawMessageSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
-// Thread classifications (negative cache — never charge twice for a thread)
+// Thread classifications (negative cache , never charge twice for a thread)
 // ---------------------------------------------------------------------------
 
 export const threadClassificationSchema = z.object({
@@ -191,7 +191,7 @@ export const draftSchema = z.object({
 export const KeyStatus = z.enum([
   "unverified", // saved but not yet checked
   "valid",
-  "invalid", // 401 — revoked, typo, or wrong key type
+  "invalid", // 401 , revoked, typo, or wrong key type
   "no_credit", // key works, account cannot be billed
   "no_access", // key works, no permission for the selected model
 ]);
@@ -203,7 +203,7 @@ export const userApiKeySchema = z.object({
 
   keyEnc: z.string(), // AES-256-GCM, same crypto as Gmail tokens
   keyHint: z.string().length(4), // last 4 chars, for masked display
-  fingerprint: z.string().length(64), // sha256(key) — compare/dedupe without decrypting
+  fingerprint: z.string().length(64), // sha256(key) , compare/dedupe without decrypting
 
   status: KeyStatus,
   lastVerifiedAt: z.date().nullable(),
@@ -240,7 +240,7 @@ export const usageEventSchema = z.object({
 export const SyncJobStatus = z.enum([
   "queued",
   "running",
-  "paused", // key problem — resumable at pageToken once fixed (§6.5)
+  "paused", // key problem , resumable at pageToken once fixed (§6.5)
   "completed",
   "failed",
   "cancelled",

@@ -49,7 +49,7 @@ export async function gmailFetch<T>(
         body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
       });
     } catch (e) {
-      // Network failure — retryable.
+      // Network failure , retryable.
       lastError = e instanceof Error ? e : new Error(String(e));
       await sleep(backoffDelay(attempt));
       continue;

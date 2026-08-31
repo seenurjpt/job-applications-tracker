@@ -22,7 +22,7 @@ const schema = z
   })
   .refine(
     (v) => !(v.NODE_ENV === "production" && v.ANTHROPIC_API_KEY_DEV),
-    "ANTHROPIC_API_KEY_DEV must not be set in production — users supply their own keys"
+    "ANTHROPIC_API_KEY_DEV must not be set in production , users supply their own keys"
   )
   .refine(
     (v) => !(v.NODE_ENV === "production" && v.E2E_TEST_MODE),

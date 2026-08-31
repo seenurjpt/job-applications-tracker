@@ -1,7 +1,7 @@
-// Publicly hosted privacy policy — required by Google's Limited Use policy
+// Publicly hosted privacy policy , required by Google's Limited Use policy
 // for the Gmail-to-Anthropic transfer to be permissible (§10).
 
-export const metadata = { title: "Privacy Policy — Job Tracker" };
+export const metadata = { title: "Privacy Policy , Job Tracker" };
 
 export default function PrivacyPage() {
   return (
@@ -21,8 +21,8 @@ export default function PrivacyPage() {
         <h2 className="text-lg font-semibold">What we send to Anthropic</h2>
         <p>
           To classify which sent emails are job applications, we transmit email
-          <strong> metadata</strong> — subject line, the short snippet Gmail
-          provides, recipient addresses, and the date — to Anthropic&apos;s
+          <strong> metadata</strong> , subject line, the short snippet Gmail
+          provides, recipient addresses, and the date , to Anthropic&apos;s
           API. We never transmit full message bodies.
         </p>
         <p>

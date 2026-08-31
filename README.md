@@ -19,12 +19,12 @@ Table · Vitest + mongodb-memory-server + MSW · Playwright.
 
 1. `pnpm install`
 2. Copy `.env.example` to `.env.local` and fill it in (see spec §2 for the
-   Google Cloud setup — **two projects**, exact scopes, Testing-mode caveats).
+   Google Cloud setup , **two projects**, exact scopes, Testing-mode caveats).
    - `AUTH_SECRET`: `openssl rand -base64 32`
    - `TOKEN_ENCRYPTION_KEY`: `openssl rand -hex 32`
 3. Run MongoDB locally (`mongodb://localhost:27017`).
 4. `pnpm dev`. Sync ("Sync sent mail" / "Refresh now" on the dashboard) runs
-   inline in the request — no background job runner required.
+   inline in the request , no background job runner required.
 
 Users bring their own Anthropic API key (Settings → API key). The app ships
 with **no** Anthropic key in production; `ANTHROPIC_API_KEY_DEV` exists only
@@ -41,14 +41,14 @@ set in production.
 | `pnpm test:unit` | Pure domain/unit tests (fast, no I/O) |
 | `pnpm test:integration` | Real Mongo (in-memory) + MSW-intercepted Gmail/Anthropic |
 | `pnpm test:e2e` | Playwright against `next dev` with stubbed OAuth/Gmail/Anthropic and a seeded DB |
-| `pnpm eval:extraction` | LLM extraction accuracy eval — **costs money**, uses `ANTHROPIC_API_KEY_DEV`, not part of CI |
+| `pnpm eval:extraction` | LLM extraction accuracy eval , **costs money**, uses `ANTHROPIC_API_KEY_DEV`, not part of CI |
 
 Windows note: `mongodb-memory-server` needs the VC++ 2015–2022 x64
 redistributable installed (`https://aka.ms/vs/17/release/vc_redist.x64.exe`).
 
 ## Architecture notes
 
-- `src/domain/` is pure — no db, no services, no framework imports. Enforced
+- `src/domain/` is pure , no db, no services, no framework imports. Enforced
   by ESLint (`no-restricted-imports`) and covered by fast unit tests.
 - `src/db/schemas.ts` holds every Zod schema; all TypeScript types are
   inferred from it.
@@ -60,7 +60,7 @@ redistributable installed (`https://aka.ms/vs/17/release/vc_redist.x64.exe`).
   retry policy the spec mandates in §6.5/§6.7 (exponential backoff + jitter,
   honour `retry-after`, up to 5 attempts, 429 never marks a key invalid) is
   implemented once in `src/services/anthropic/call.ts` and used for every
-  call — one retry layer instead of two stacked ones, and throttling stays
+  call , one retry layer instead of two stacked ones, and throttling stays
   observable to the sync pipeline.
 - Sync jobs persist a `pageToken` cursor after every page and **pause** (never
   fail) on key problems, so Resume continues where it stopped. A
@@ -74,7 +74,7 @@ redistributable installed (`https://aka.ms/vs/17/release/vc_redist.x64.exe`).
 `E2E_TEST_MODE=1` (refused in production by the env schema) enables a
 credentials login for Playwright, the `/api/test/seed` route, and lets the
 Gmail/Anthropic endpoints be pointed at `e2e/stub-server.mjs`. Playwright's
-global setup wires all of this automatically — just run `pnpm test:e2e`.
+global setup wires all of this automatically , just run `pnpm test:e2e`.
 
 ## Compliance (spec §10)
 

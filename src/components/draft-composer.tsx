@@ -15,7 +15,7 @@ const TONES: Array<{ value: DraftToneValue; label: string }> = [
   { value: "final_check_in", label: "Final check-in" },
 ];
 
-/** Phase 5: single draft — generate, preview and edit, then create in Gmail. */
+/** Phase 5: single draft , generate, preview and edit, then create in Gmail. */
 export function DraftComposer({ applicationId }: { applicationId: string }) {
   const [tone, setTone] = useState<DraftToneValue>("polite_nudge");
   const [draft, setDraft] = useState<{
@@ -44,7 +44,7 @@ export function DraftComposer({ applicationId }: { applicationId: string }) {
       const res = await createDraftInGmailAction(draft);
       setResult(
         res.ok
-          ? "Draft created in Gmail — it will appear inside the original thread."
+          ? "Draft created in Gmail , it will appear inside the original thread."
           : `Creation failed: ${res.error}`
       );
       if (res.ok) setDraft(null);

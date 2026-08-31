@@ -21,7 +21,7 @@ export type IncrementalOutcome =
 
 /**
  * historyId-based incremental sync (§7). On HTTP 404 the history window has
- * expired (Gmail retains roughly a week) — fall back to a bounded 7-day
+ * expired (Gmail retains roughly a week) , fall back to a bounded 7-day
  * backfill rather than a full re-scan.
  */
 export async function runIncrementalSync(
@@ -35,7 +35,7 @@ export async function runIncrementalSync(
   const user = await usersRepo.findById(account.userId);
   if (!user) return { kind: "skipped", reason: "user_missing" };
 
-  // Key first — same gate as backfill (§6.6).
+  // Key first , same gate as backfill (§6.6).
   const keyCheck = await anthropicFor(user._id);
   if (!keyCheck.ok) return { kind: "skipped", reason: `key_${keyCheck.error}` };
 

@@ -1,6 +1,6 @@
-// Publicly hosted terms of service — linked from the Google OAuth consent screen.
+// Publicly hosted terms of service , linked from the Google OAuth consent screen.
 
-export const metadata = { title: "Terms of Service — Job Tracker" };
+export const metadata = { title: "Terms of Service , Job Tracker" };
 
 export default function TermsPage() {
   return (

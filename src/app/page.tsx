@@ -1,4 +1,4 @@
-// Public landing page — Google's OAuth branding verification requires the
+// Public landing page , Google's OAuth branding verification requires the
 // home page to be viewable without login, to explain the app's purpose, and
 // to link the privacy policy; keep all three when restyling.
 
@@ -69,7 +69,7 @@ export default async function Home() {
           </h1>
           <p className="max-w-md text-lg text-indigo-100">
             Skip the spreadsheet. Every job application you send from Gmail is
-            detected, tracked, and followed up — automatically.
+            detected, tracked, and followed up , automatically.
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default async function Home() {
           <div>
             <h2 className="text-3xl font-bold">Welcome Back!</h2>
             <p className="mt-2 text-sm text-neutral-500">
-              Sign in with your Google account — it takes less than a minute.
+              Sign in with your Google account , it takes less than a minute.
             </p>
           </div>
 
@@ -116,13 +116,13 @@ export default async function Home() {
             </li>
             <li className="flex gap-2">
               <span className="text-indigo-600">✓</span> Drafts follow-up
-              emails — never sends without you
+              emails , never sends without you
             </li>
           </ul>
 
           <p className="text-xs leading-5 text-neutral-400">
             With your consent, we read your Gmail sent mail (read-only) and
-            create drafts. Only email metadata is ever processed — never full
+            create drafts. Only email metadata is ever processed , never full
             message bodies, and nothing is used for advertising.
           </p>
         </div>

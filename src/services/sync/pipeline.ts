@@ -52,7 +52,7 @@ export interface SyncContext {
 
 /**
  * Resolves everything a page needs, in the spec-mandated order: the KEY is
- * checked before any Gmail call (§6.6) — discovering a missing key three
+ * checked before any Gmail call (§6.6) , discovering a missing key three
  * thousand Gmail calls in wastes the user's quota.
  */
 async function buildContext(
@@ -76,7 +76,7 @@ async function buildContext(
     return { ok: false, outcome: { kind: "done" } };
   }
 
-  // Step 0 — key check, before any Gmail call.
+  // Step 0 , key check, before any Gmail call.
   const keyCheck = await anthropicFor(user._id);
   if (!keyCheck.ok) {
     const reason = `key_${keyCheck.error}`;
@@ -114,7 +114,7 @@ function statusConfig(user: User): StatusConfig {
 /**
  * Processes ONE page of the mailbox listing, then persists the cursor.
  * Called in a loop by the Inngest backfill function; each invocation is a
- * separate step, so a crash resumes at the stored pageToken — never from
+ * separate step, so a crash resumes at the stored pageToken , never from
  * the start (§0.5).
  */
 export async function processNextPage(jobId: ObjectId): Promise<PageOutcome> {
@@ -125,7 +125,7 @@ export async function processNextPage(jobId: ObjectId): Promise<PageOutcome> {
 
   if (job.status !== "running") await syncJobs.markRunning(job._id);
 
-  // 1. list — IDs only, paginated
+  // 1. list , IDs only, paginated
   if (!job.rangeFrom || !job.rangeTo) {
     await syncJobs.fail(job._id, "backfill job has no date range");
     return { kind: "done" };
@@ -136,7 +136,7 @@ export async function processNextPage(jobId: ObjectId): Promise<PageOutcome> {
   );
   const page = await listMessages(ctx.accessToken, q, job.pageToken, PAGE_SIZE);
 
-  // 2. metadata — batch fetch, concurrency 10
+  // 2. metadata , batch fetch, concurrency 10
   const metas = await getMetadataBatch(
     ctx.accessToken,
     page.ids.map((m) => m.id)
@@ -144,7 +144,7 @@ export async function processNextPage(jobId: ObjectId): Promise<PageOutcome> {
   await syncJobs.addStats(job._id, { listed: metas.length });
 
   const outcome = await processMetadataBatch(ctx, metas);
-  if (outcome) return outcome; // paused mid-page — cursor NOT advanced
+  if (outcome) return outcome; // paused mid-page , cursor NOT advanced
 
   if (page.nextPageToken) {
     await syncJobs.savePageToken(job._id, page.nextPageToken);
@@ -173,7 +173,7 @@ export async function processMetadataBatch(
 ): Promise<PageOutcome | null> {
   const { job, account, user } = ctx;
 
-  // Store raw sent-mail metadata (phase 2 — survives even if AI stages fail).
+  // Store raw sent-mail metadata (phase 2 , survives even if AI stages fail).
   await rawMessages.upsertMany(
     metas.map((m) => ({
       accountId: account._id,
@@ -189,7 +189,7 @@ export async function processMetadataBatch(
     }))
   );
 
-  // 3. prefilter — free, recall-oriented
+  // 3. prefilter , free, recall-oriented
   const candidates = metas.filter((m) =>
     looksLikeApplication({ subject: m.subject, snippet: m.snippet, to: m.to })
   );
@@ -213,7 +213,7 @@ export async function processMetadataBatch(
       (cached.get(t)?.confidence ?? 0) >= CONFIDENCE_THRESHOLD
   );
 
-  // 5. classify — batches of 10, concurrency from the user's key config
+  // 5. classify , batches of 10, concurrency from the user's key config
   const summaries: ThreadSummaryInput[] = toClassify.map((threadId) => {
     const first = byThread.get(threadId)![0]!;
     return {
@@ -309,7 +309,7 @@ export async function processMetadataBatch(
   return null;
 }
 
-/** Full thread fetch ONLY for confirmed applications — picks up inbound replies. */
+/** Full thread fetch ONLY for confirmed applications , picks up inbound replies. */
 async function hydrateAndUpsert(
   ctx: SyncContext,
   extraction: ExtractionResult
@@ -332,7 +332,7 @@ async function hydrateAndUpsert(
     }))
   );
   // No outbound message means the user never sent anything in this thread
-  // (e.g. a no-reply portal notification) — not an application they made.
+  // (e.g. a no-reply portal notification) , not an application they made.
   if (!stats) return false;
 
   // Reply classification (phase 8): classify the latest inbound reply.

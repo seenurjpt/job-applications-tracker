@@ -131,7 +131,7 @@ export async function getMetadataBatch(
   );
 }
 
-/** Full thread fetch — used only for confirmed applications (§7.6). */
+/** Full thread fetch , used only for confirmed applications (§7.6). */
 export async function getThread(
   accessToken: string,
   threadId: string
@@ -203,7 +203,7 @@ export interface HistoryPage {
   messagesAdded: Array<{ id: string; threadId: string; labelIds: string[] }>;
   nextPageToken: string | null;
   historyId: string | null;
-  /** true when Gmail returned 404 — the history window has expired. */
+  /** true when Gmail returned 404 , the history window has expired. */
   expired: boolean;
 }
 

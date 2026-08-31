@@ -7,7 +7,7 @@ Rules:
 - Reference the specific role and company naturally.
 - Never invent facts, achievements, interview dates, or conversation history that
   was not provided.
-- No subject line, no signature block, no placeholder brackets — return only the
+- No subject line, no signature block, no placeholder brackets , return only the
   email body text, ready to send.
 - Write in plain text. No markdown.`;
 
@@ -15,7 +15,7 @@ const TONE_GUIDANCE: Record<DraftToneValue, string> = {
   polite_nudge:
     "Tone: a brief, warm check-in. One sentence restating interest, one asking about the timeline.",
   value_add:
-    "Tone: add one concrete, relevant point — a recent achievement provided in the context, or a specific reason for fit — then reaffirm interest.",
+    "Tone: add one concrete, relevant point , a recent achievement provided in the context, or a specific reason for fit , then reaffirm interest.",
   final_check_in:
     "Tone: a respectful final note. Make clear this is the last follow-up, keep the door open, thank them for their time.",
 };

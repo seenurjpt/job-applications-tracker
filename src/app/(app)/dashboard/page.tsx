@@ -33,11 +33,11 @@ export default async function DashboardPage() {
   const keyValid = apiKey?.status === "valid";
   const canSync = Boolean(gmailReady && keyValid);
   const disabledReason = !account
-    ? "Connect a Gmail account first — see onboarding."
+    ? "Connect a Gmail account first , see onboarding."
     : !gmailReady
       ? "Gmail needs to be reconnected before syncing."
       : !keyValid
-        ? "Add a valid Anthropic API key in settings before syncing — the sync classifies threads with your key."
+        ? "Add a valid Anthropic API key in settings before syncing , the sync classifies threads with your key."
         : null;
 
   const activeJob = account
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
             activeJob={activeJob ? toSyncJobDTO(activeJob) : null}
           />
         ) : (
-          <Link href="/onboarding" className="text-sm underline">
+          <Link href="/onboarding" className="text-sm font-medium text-indigo-600 hover:underline">
             Finish onboarding
           </Link>
         )}
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
 
       {lastJob ? (
         <Card className="text-sm text-neutral-600">
-          Last sync ({lastJob.type}): <strong>{lastJob.status}</strong> —{" "}
+          Last sync ({lastJob.type}): <strong>{lastJob.status}</strong> ,{" "}
           {lastJob.stats.listed} messages listed, {lastJob.stats.prefiltered}{" "}
           passed the prefilter, {lastJob.stats.classified} classified,{" "}
           {lastJob.stats.applications} new applications.
@@ -100,7 +100,7 @@ export default async function DashboardPage() {
       <div>
         <Link
           href="/applications"
-          className="text-sm font-medium underline hover:text-neutral-600"
+          className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline"
         >
           View all applications →
         </Link>

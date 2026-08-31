@@ -31,7 +31,7 @@ export async function saveApiKey(input: unknown) {
     draftModel: parsed.data.draftModel,
   });
   revalidatePath("/settings/api-key");
-  // Result contains status + hint only — never the key.
+  // Result contains status + hint only , never the key.
   return { ok: true as const, status: result.status, unchanged: result.unchanged };
 }
 
@@ -57,7 +57,7 @@ export async function updateApiKeyConfig(input: unknown) {
 
   await apiKeysRepo.updateConfig(userId, parsed.data);
 
-  // A key may not have access to every model — re-verify on model change (§6.9).
+  // A key may not have access to every model , re-verify on model change (§6.9).
   if (parsed.data.extractionModel || parsed.data.draftModel) {
     const rec = await apiKeysRepo.findByUser(userId);
     if (rec) {

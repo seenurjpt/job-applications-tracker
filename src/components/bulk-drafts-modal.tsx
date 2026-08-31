@@ -28,7 +28,7 @@ const TONES: Array<{ value: DraftToneValue; label: string }> = [
 /**
  * Bulk flow (phase 6): generate all bodies → one review screen with per-row
  * edit → queued creation with per-row progress and per-row retry. A mid-batch
- * failure leaves the other rows created — no total rollback.
+ * failure leaves the other rows created , no total rollback.
  */
 export function BulkDraftsBar({
   selected,
@@ -162,7 +162,7 @@ export function BulkDraftsBar({
                 >
                   <div className="mb-2 flex items-center justify-between text-sm">
                     <span className="font-medium">
-                      {r.company ?? "Unknown"} — {r.role ?? "Unknown role"}
+                      {r.company ?? "Unknown"} , {r.role ?? "Unknown role"}
                     </span>
                     <span
                       data-testid={`bulk-row-state-${i}`}

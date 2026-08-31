@@ -19,7 +19,7 @@ test("onboarding gates sync until Gmail AND a valid key exist; key is masked wit
   await page.goto("/dashboard");
   await page.waitForURL(/onboarding/);
 
-  // Connect Gmail only — sync must still be disabled.
+  // Connect Gmail only , sync must still be disabled.
   await seed(request, "connect-gmail");
   await page.goto("/dashboard");
   await expect(page.getByTestId("start-sync")).toBeDisabled();

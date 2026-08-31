@@ -37,7 +37,7 @@ export default async function ApiKeyPage() {
       <div>
         <h1 className="text-2xl font-semibold">Anthropic API key</h1>
         <p className="mt-1 text-sm text-neutral-500">
-          Extraction and drafting run on your own Anthropic account — you are
+          Extraction and drafting run on your own Anthropic account , you are
           Anthropic&apos;s customer for that processing; this app never sees
           your bill and never stores your key in readable form.
         </p>

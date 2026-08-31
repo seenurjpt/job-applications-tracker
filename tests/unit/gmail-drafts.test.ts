@@ -72,19 +72,19 @@ describe("buildRawMessage", () => {
 
   it("encodes a non-ASCII subject as an RFC 2047 encoded word", () => {
     const h = headersOf(
-      decodeRaw(buildRawMessage({ ...base, subject: "Bewerbung — Straße Café" }))
+      decodeRaw(buildRawMessage({ ...base, subject: "Bewerbung , Straße Café" }))
     );
     expect(h["Subject"]).toMatch(/^=\?UTF-8\?B\?.+\?=$/);
     const encoded = h["Subject"]!.match(/^=\?UTF-8\?B\?(.+)\?=$/)![1]!;
     expect(Buffer.from(encoded, "base64").toString("utf8")).toBe(
-      "Re: Bewerbung — Straße Café"
+      "Re: Bewerbung , Straße Café"
     );
   });
 
   it("round-trips a non-ASCII body", () => {
     const mime = decodeRaw(
-      buildRawMessage({ ...base, body: "नमस्ते — following up 🙂" })
+      buildRawMessage({ ...base, body: "नमस्ते , following up 🙂" })
     );
-    expect(bodyOf(mime)).toBe("नमस्ते — following up 🙂");
+    expect(bodyOf(mime)).toBe("नमस्ते , following up 🙂");
   });
 });

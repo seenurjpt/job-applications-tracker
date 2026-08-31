@@ -1,6 +1,6 @@
 import type { Db } from "mongodb";
 
-/** Run on boot. Idempotent — createIndex is a no-op when the index exists. */
+/** Run on boot. Idempotent , createIndex is a no-op when the index exists. */
 export async function ensureIndexes(db: Db): Promise<void> {
   await db.collection("users").createIndex({ email: 1 }, { unique: true });
 
@@ -9,7 +9,7 @@ export async function ensureIndexes(db: Db): Promise<void> {
     .createIndex({ userId: 1, email: 1 }, { unique: true });
 
   // The unique index on {accountId, threadId} is what makes the whole sync
-  // idempotent — re-running a backfill upserts rather than duplicating.
+  // idempotent , re-running a backfill upserts rather than duplicating.
   await db
     .collection("applications")
     .createIndex({ accountId: 1, threadId: 1 }, { unique: true });

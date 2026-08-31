@@ -24,7 +24,7 @@ export function maskedKey(keyHint: string): string {
  * Verify with a real one-token call. Format checks alone catch typos but not
  * revoked keys or billing problems.
  *
- * A 429 means the key is VALID, just throttled — marking it invalid there
+ * A 429 means the key is VALID, just throttled , marking it invalid there
  * locks users out of their own working key (§6.3).
  */
 export async function verifyKey(
@@ -64,7 +64,7 @@ export interface SaveKeyResult {
 }
 
 /**
- * Save + verify. Trims first — paste whitespace is the single most common
+ * Save + verify. Trims first , paste whitespace is the single most common
  * "my key doesn't work" report. Saving an identical key (same fingerprint)
  * is a no-op, not a re-verification (§6.10).
  */
@@ -128,7 +128,7 @@ async function verifyAndRecord(
 
 /**
  * Re-verify the stored key against a (possibly new) model choice.
- * Used when the user changes models — a key may not have access to every model.
+ * Used when the user changes models , a key may not have access to every model.
  */
 export async function reverifyStoredKey(
   userId: ObjectId,
@@ -139,7 +139,7 @@ export async function reverifyStoredKey(
 }
 
 export async function deleteKey(userId: ObjectId): Promise<void> {
-  // Existing applications are untouched — extraction already happened,
+  // Existing applications are untouched , extraction already happened,
   // that data is theirs (§6.10).
   await apiKeys.remove(userId);
 }

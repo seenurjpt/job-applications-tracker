@@ -35,19 +35,35 @@ export default async function AppLayout({
       <header className="border-b border-neutral-200 bg-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <nav className="flex items-center gap-6 text-sm font-medium">
-            <Link href="/dashboard" className="text-base font-semibold">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-1.5 text-base font-semibold"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                aria-hidden="true"
+                className="text-indigo-600"
+              >
+                <path d="M12 2v20M3.34 7l17.32 10M3.34 17L20.66 7" />
+              </svg>
               Job Tracker
             </Link>
-            <Link href="/dashboard" className="text-neutral-600 hover:text-neutral-900">
+            <Link href="/dashboard" className="text-neutral-600 hover:text-indigo-600">
               Dashboard
             </Link>
             <Link
               href="/applications"
-              className="text-neutral-600 hover:text-neutral-900"
+              className="text-neutral-600 hover:text-indigo-600"
             >
               Applications
             </Link>
-            <Link href="/settings" className="text-neutral-600 hover:text-neutral-900">
+            <Link href="/settings" className="text-neutral-600 hover:text-indigo-600">
               Settings
             </Link>
           </nav>
