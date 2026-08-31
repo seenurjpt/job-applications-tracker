@@ -62,7 +62,7 @@ export default async function Home() {
 
         <div className="flex items-center gap-3">
           <AsteriskLogo />
-          <span className="text-2xl font-bold tracking-tight">Job Tracker</span>
+          <span className="text-4xl font-bold tracking-tight">Job Tracker</span>
         </div>
 
         <div className="space-y-5">
