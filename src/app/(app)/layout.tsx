@@ -5,6 +5,7 @@ import * as accountsRepo from "@/db/repositories/accounts";
 import * as apiKeysRepo from "@/db/repositories/api-keys";
 import { toAccountDTO } from "@/lib/serialize";
 import { KeyProblemBanner, ReconnectBanner } from "@/components/banners";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export default async function AppLayout({
   children,
@@ -50,19 +51,13 @@ export default async function AppLayout({
               Settings
             </Link>
           </nav>
-          <form
+          <SignOutButton
+            email={session.user.email ?? ""}
             action={async () => {
               "use server";
-              await signOut({ redirectTo: "/signin" });
+              await signOut({ redirectTo: "/" });
             }}
-          >
-            <button
-              type="submit"
-              className="text-sm text-neutral-500 hover:text-neutral-900"
-            >
-              Sign out ({session.user.email})
-            </button>
-          </form>
+          />
         </div>
       </header>
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
