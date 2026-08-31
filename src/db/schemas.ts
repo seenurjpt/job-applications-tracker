@@ -251,6 +251,9 @@ export const syncJobSchema = z.object({
   error: z.string().nullable(),
   startedAt: z.date().nullable(),
   finishedAt: z.date().nullable(),
+  // Bumped on every page/stat write. A queued/running job whose heartbeat has
+  // gone stale was orphaned (crash, deploy, timeout) and is safe to reclaim.
+  heartbeatAt: z.date().nullable().default(null),
 });
 
 export type User = z.infer<typeof userSchema>;

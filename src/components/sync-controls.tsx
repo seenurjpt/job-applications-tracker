@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   estimateBackfill,
@@ -10,6 +10,113 @@ import {
 } from "@/actions/sync";
 import { Button, Select } from "@/components/ui";
 import type { SyncJobDTO } from "@/lib/serialize";
+
+/** Mirrors STALL_AFTER_MS in actions/sync.ts. */
+const STALL_AFTER_MS = 90_000;
+const POLL_INTERVAL_MS = 5_000;
+
+function formatElapsed(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const mm = String(m).padStart(2, "0");
+  const ss = String(s).padStart(2, "0");
+  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
+}
+
+/** Creation time embedded in a MongoDB ObjectId hex string. */
+function idTimestamp(id: string): number {
+  return parseInt(id.slice(0, 8), 16) * 1000;
+}
+
+/**
+ * Live view of a queued/running job: ticking elapsed time, periodic refresh
+ * of the server-held stats, and stall recovery — when the heartbeat (persisted
+ * in MongoDB with the page cursor) goes silent, the job's runner died, so we
+ * resume it from where it stopped. No browser storage involved: the server is
+ * the source of truth, so this works after refreshes and reconnects alike.
+ */
+function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
+  const router = useRouter();
+  const [now, setNow] = useState(() => Date.now());
+  const [resuming, setResuming] = useState(false);
+  const [resumeError, setResumeError] = useState<string | null>(null);
+  const resumeAttempted = useRef(false);
+
+  useEffect(() => {
+    const tick = setInterval(() => setNow(Date.now()), 1000);
+    const poll = setInterval(() => router.refresh(), POLL_INTERVAL_MS);
+    return () => {
+      clearInterval(tick);
+      clearInterval(poll);
+    };
+  }, [router]);
+
+  const lastSignal = job.heartbeatAt ?? job.startedAt;
+  const lastSignalMs = lastSignal ? Date.parse(lastSignal) : idTimestamp(job.id);
+  const stalled = now - lastSignalMs > STALL_AFTER_MS;
+  const startedMs = job.startedAt ? Date.parse(job.startedAt) : null;
+
+  const doResume = async () => {
+    setResuming(true);
+    setResumeError(null);
+    const res = await resumeSync({ jobId: job.id });
+    setResuming(false);
+    // "job_still_active" means the runner was alive after all — just refresh.
+    if (!res.ok && res.error !== "job_still_active") {
+      setResumeError(res.error);
+    }
+    router.refresh();
+  };
+
+  // Auto-resume once per mount; further attempts stay manual so a repeated
+  // failure can't loop.
+  useEffect(() => {
+    if (stalled && !resumeAttempted.current) {
+      resumeAttempted.current = true;
+      void doResume();
+    }
+  }, [stalled]);
+
+  if (resuming || (stalled && !resumeError)) {
+    return (
+      <div
+        className="flex items-center gap-3 text-sm text-amber-700"
+        data-testid="sync-resuming"
+      >
+        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-600" />
+        Sync was interrupted — resuming from where it stopped…
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-3 text-sm text-neutral-600">
+        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-blue-600" />
+        Sync {job.status} — {job.stats.listed} listed, {job.stats.classified}{" "}
+        classified, {job.stats.applications} applications found.
+        {startedMs !== null ? (
+          <span className="tabular-nums text-neutral-500" data-testid="sync-elapsed">
+            {formatElapsed(now - startedMs)}
+          </span>
+        ) : null}
+        <Button size="sm" variant="outline" onClick={() => router.refresh()}>
+          Refresh
+        </Button>
+      </div>
+      {resumeError ? (
+        <p className="text-xs text-red-600">
+          Could not resume automatically ({resumeError}).{" "}
+          <button className="underline" onClick={() => void doResume()}>
+            Try again
+          </button>
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
 const PRESETS = [
   { value: "last_week", label: "Last week" },
@@ -74,17 +181,7 @@ export function SyncControls({
   }
 
   if (activeJob && (activeJob.status === "running" || activeJob.status === "queued")) {
-    return (
-      <div className="flex items-center gap-3 text-sm text-neutral-600">
-        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-blue-600" />
-        Sync {activeJob.status} — {activeJob.stats.listed} listed,{" "}
-        {activeJob.stats.classified} classified,{" "}
-        {activeJob.stats.applications} applications found.
-        <Button size="sm" variant="outline" onClick={() => router.refresh()}>
-          Refresh
-        </Button>
-      </div>
-    );
+    return <ActiveJobBanner job={activeJob} />;
   }
 
   return (

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { currentUserId } from "@/auth";
 import * as accounts from "@/db/repositories/accounts";
+import * as syncJobs from "@/db/repositories/sync-jobs";
 import {
   createBackfillJob,
   resumeJob,
@@ -56,6 +57,16 @@ export async function estimateBackfill(input: unknown) {
   return { ok: true as const, ...est.value };
 }
 
+/** How long without a heartbeat before a queued/running job counts as dead. */
+const STALL_AFTER_MS = 90_000;
+
+/**
+ * Resumes a sync from its persisted cursor. Handles both paused jobs (key
+ * problems, fixed by the user) and stalled ones — a crash, redeploy, or
+ * timeout killed the runner mid-backfill. The pageToken lives in MongoDB, so
+ * resumption continues where the dead run stopped, and the classification
+ * cache means a re-run page is never billed twice.
+ */
 export async function resumeSync(input: unknown) {
   const userId = await currentUserId();
   if (!userId) return { ok: false as const, error: "unauthenticated" };
@@ -65,8 +76,32 @@ export async function resumeSync(input: unknown) {
   if (!parsed.success) return { ok: false as const, error: "invalid_input" };
 
   const jobId = new ObjectId(parsed.data.jobId);
-  await resumeJob(jobId);
-  await runBackfillToCompletion(jobId);
+  const job = await syncJobs.findById(jobId);
+  if (!job) return { ok: false as const, error: "job_not_found" };
+  const account = await accounts.findById(job.accountId);
+  if (!account || !account.userId.equals(userId))
+    return { ok: false as const, error: "job_not_found" };
+
+  if (job.status === "paused") {
+    await resumeJob(jobId);
+    await runBackfillToCompletion(jobId);
+    revalidatePath("/dashboard");
+    return { ok: true as const };
+  }
+
+  // Stalled queued/running job: claim it atomically so a still-live runner
+  // (or a concurrent resume from another tab) is never duplicated.
+  const staleBefore = new Date(Date.now() - STALL_AFTER_MS);
+  const claimed = await syncJobs.claimStalled(jobId, staleBefore);
+  if (!claimed) return { ok: false as const, error: "job_still_active" };
+
+  if (job.type === "incremental") {
+    // Incremental jobs are short and restartable from history — no cursor.
+    await syncJobs.cancel(jobId);
+    await runIncrementalSync(account._id);
+  } else {
+    await runBackfillToCompletion(jobId);
+  }
   revalidatePath("/dashboard");
   return { ok: true as const };
 }

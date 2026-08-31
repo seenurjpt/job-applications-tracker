@@ -90,6 +90,8 @@ export interface SyncJobDTO {
   pausedReason: string | null;
   stats: SyncJob["stats"];
   error: string | null;
+  startedAt: string | null;
+  heartbeatAt: string | null;
 }
 
 export function toSyncJobDTO(j: SyncJob): SyncJobDTO {
@@ -100,6 +102,8 @@ export function toSyncJobDTO(j: SyncJob): SyncJobDTO {
     pausedReason: j.pausedReason,
     stats: j.stats,
     error: j.error,
+    startedAt: j.startedAt?.toISOString() ?? null,
+    heartbeatAt: j.heartbeatAt?.toISOString() ?? null,
   };
 }
 
