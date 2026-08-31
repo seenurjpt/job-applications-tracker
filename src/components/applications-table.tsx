@@ -10,7 +10,7 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 import { analyzeIntents, getApplicationThread } from "@/actions/applications";
-import { Input, Select } from "@/components/ui";
+import { Button, Input, Select } from "@/components/ui";
 import { InlineEditCell } from "@/components/inline-edit-cell";
 import { StatusBadge } from "@/components/status-badge";
 import { BulkDraftsBar } from "@/components/bulk-drafts-modal";
@@ -61,8 +61,14 @@ function IntentBadge({ intent }: { intent: string | null }) {
 
 export function ApplicationsTable({
   applications,
+  page,
+  pageSize,
+  total,
 }: {
   applications: ApplicationDTO[];
+  page: number;
+  pageSize: number;
+  total: number;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -74,10 +80,12 @@ export function ApplicationsTable({
   const [analyzeMessage, setAnalyzeMessage] = useState<string | null>(null);
 
   // Filters/sort live in URL search params so the back button restores state.
+  // Changing any filter resets pagination to page 1.
   const setParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) params.set(key, value);
     else params.delete(key);
+    if (key !== "page") params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -87,8 +95,11 @@ export function ApplicationsTable({
     const params = new URLSearchParams(searchParams.toString());
     params.set("sortBy", col);
     params.set("sortDir", sortBy === col && sortDir === "desc" ? "asc" : "desc");
+    params.delete("page");
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
   const toggleExpand = async (id: string) => {
     if (expanded === id) {
@@ -397,6 +408,38 @@ export function ApplicationsTable({
           </tbody>
         </table>
       </div>
+
+      {total > pageSize ? (
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
+          <span data-testid="pagination-summary">
+            Showing {(page - 1) * pageSize + 1}–
+            {Math.min(page * pageSize, total)} of {total}
+          </span>
+          <div className="flex items-center gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={page <= 1}
+              onClick={() => setParam("page", String(page - 1))}
+              data-testid="page-prev"
+            >
+              ← Prev
+            </Button>
+            <span className="px-2 tabular-nums">
+              {page} / {pageCount}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={page >= pageCount}
+              onClick={() => setParam("page", String(page + 1))}
+              data-testid="page-next"
+            >
+              Next →
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

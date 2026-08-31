@@ -5,7 +5,8 @@ import * as accountsRepo from "@/db/repositories/accounts";
 import * as apiKeysRepo from "@/db/repositories/api-keys";
 import { toAccountDTO } from "@/lib/serialize";
 import { KeyProblemBanner, ReconnectBanner } from "@/components/banners";
-import { SignOutButton } from "@/components/sign-out-button";
+import { AppNav } from "@/components/app-nav";
+import { UserMenu } from "@/components/user-menu";
 
 export default async function AppLayout({
   children,
@@ -33,11 +34,11 @@ export default async function AppLayout({
   return (
     <div className="min-h-screen">
       <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2">
-          <nav className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium sm:gap-x-6">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
+          <div className="flex items-center gap-6">
             <Link
               href="/dashboard"
-              className="flex items-center gap-1.5 text-base font-semibold"
+              className="flex shrink-0 items-center gap-1.5 text-base font-semibold"
             >
               <svg
                 width="18"
@@ -54,26 +55,21 @@ export default async function AppLayout({
               </svg>
               Job Tracker
             </Link>
-            <Link href="/dashboard" className="text-neutral-600 hover:text-indigo-600">
-              Dashboard
-            </Link>
-            <Link
-              href="/applications"
-              className="text-neutral-600 hover:text-indigo-600"
-            >
-              Applications
-            </Link>
-            <Link href="/settings" className="text-neutral-600 hover:text-indigo-600">
-              Settings
-            </Link>
-          </nav>
-          <SignOutButton
+            <AppNav className="hidden sm:flex" />
+          </div>
+          <UserMenu
+            name={session.user.name ?? null}
             email={session.user.email ?? ""}
-            action={async () => {
+            image={session.user.image ?? null}
+            signOutAction={async () => {
               "use server";
               await signOut({ redirectTo: "/" });
             }}
           />
+        </div>
+        {/* Mobile nav row */}
+        <div className="mx-auto max-w-6xl overflow-x-auto border-t border-neutral-100 px-4 py-1.5 sm:hidden">
+          <AppNav />
         </div>
       </header>
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">

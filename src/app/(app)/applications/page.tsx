@@ -45,6 +45,10 @@ export default async function ApplicationsPage({
     ["appliedAt", "lastActivityAt", "company", "status"] as const
   ).find((s) => s === str(params.sortBy));
 
+  const PAGE_SIZE = 10;
+  const pageRaw = Number(str(params.page) ?? "1");
+  const page = Number.isInteger(pageRaw) && pageRaw >= 1 ? pageRaw : 1;
+
   const { items, total } = await applicationsRepo.query({
     userId,
     status: status.success ? status.data : undefined,
@@ -53,7 +57,8 @@ export default async function ApplicationsPage({
     search: str(params.q),
     sortBy,
     sortDir: str(params.sortDir) === "asc" ? "asc" : "desc",
-    limit: 200,
+    limit: PAGE_SIZE,
+    skip: (page - 1) * PAGE_SIZE,
   });
 
   const tabs = [
@@ -89,7 +94,12 @@ export default async function ApplicationsPage({
           </a>
         ))}
       </nav>
-      <ApplicationsTable applications={items.map(toApplicationDTO)} />
+      <ApplicationsTable
+        applications={items.map(toApplicationDTO)}
+        page={page}
+        pageSize={PAGE_SIZE}
+        total={total}
+      />
     </div>
   );
 }
