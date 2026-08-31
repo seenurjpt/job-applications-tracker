@@ -32,8 +32,8 @@ export default async function AppLayout({
       : null;
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
+    <div className="flex h-dvh flex-col">
+      <header className="relative z-40 border-b border-neutral-200 bg-white">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-6">
             <Link
@@ -72,12 +72,17 @@ export default async function AppLayout({
           <AppNav />
         </div>
       </header>
-      <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
-        {needsReconnect ? (
-          <ReconnectBanner account={toAccountDTO(needsReconnect)} />
-        ) : null}
-        {keyProblem ? <KeyProblemBanner status={keyProblem} /> : null}
-        {children}
+      {/* The content area, not the viewport, is the scroll container — the
+          scrollbar starts below the header, and its gutter is reserved on
+          both edges so content stays centered. */}
+      <main className="flex-1 overflow-y-auto [scrollbar-gutter:stable_both-edges]">
+        <div className="mx-auto max-w-6xl space-y-4 px-4 py-6">
+          {needsReconnect ? (
+            <ReconnectBanner account={toAccountDTO(needsReconnect)} />
+          ) : null}
+          {keyProblem ? <KeyProblemBanner status={keyProblem} /> : null}
+          {children}
+        </div>
       </main>
     </div>
   );

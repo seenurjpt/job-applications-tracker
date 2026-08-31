@@ -4,17 +4,9 @@
   color-scheme: light;
 }
 
-/*
- * Reserve scrollbar-width gutters on BOTH viewport edges so content stays
- * centered and never shifts when the vertical scrollbar appears/disappears
- * (e.g. flipping between pages of different heights). The scrollbar, when
- * present, renders inside the reserved right-hand gutter.
- */
-html {
-  scrollbar-gutter: stable both-edges;
-}
-
-/* Thin, soft-indigo scrollbars, everywhere (page + inner scroll containers). */
+/* Thin, soft-indigo scrollbars, everywhere (page + inner scroll containers).
+   In the app shell, <main> is the scroll container and reserves stable
+   scrollbar gutters on both edges so content never shifts. */
 * {
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: var(--color-indigo-300) transparent;
