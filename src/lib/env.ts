@@ -14,8 +14,6 @@ const schema = z
     ANTHROPIC_API_KEY_DEV: z.string().startsWith("sk-ant-").optional(),
     ANTHROPIC_EXTRACTION_MODEL: z.string().default("claude-haiku-4-5-20251001"),
     ANTHROPIC_DRAFT_MODEL: z.string().default("claude-sonnet-5"),
-    INNGEST_EVENT_KEY: z.string().optional(),
-    INNGEST_SIGNING_KEY: z.string().optional(),
     NODE_ENV: z.enum(["development", "test", "production"]),
     // Test-only escape hatches. Never set in production.
     E2E_TEST_MODE: z.string().optional(),

@@ -3,9 +3,7 @@
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { env } from "@/lib/env";
 import { currentUserId } from "@/auth";
-import { inngest } from "@/inngest/client";
 import * as accounts from "@/db/repositories/accounts";
 import {
   createBackfillJob,
@@ -18,18 +16,6 @@ const startSchema = z.object({
   accountId: z.string().refine(ObjectId.isValid),
   preset: z.enum(["today", "last_week", "last_month", "last_3_months", "last_6_months"]),
 });
-
-async function dispatchBackfill(jobId: ObjectId): Promise<void> {
-  // E2E runs inline — no Inngest dev server in CI.
-  if (env.E2E_TEST_MODE) {
-    await runBackfillToCompletion(jobId);
-    return;
-  }
-  await inngest.send({
-    name: "sync/backfill.requested",
-    data: { jobId: jobId.toHexString() },
-  });
-}
 
 export async function startBackfill(input: unknown) {
   const userId = await currentUserId();
@@ -45,7 +31,7 @@ export async function startBackfill(input: unknown) {
     accountId: account._id,
     preset: parsed.data.preset,
   });
-  await dispatchBackfill(job._id);
+  await runBackfillToCompletion(job._id);
   revalidatePath("/dashboard");
   return { ok: true as const, jobId: job._id.toHexString() };
 }
@@ -80,7 +66,7 @@ export async function resumeSync(input: unknown) {
 
   const jobId = new ObjectId(parsed.data.jobId);
   await resumeJob(jobId);
-  await dispatchBackfill(jobId);
+  await runBackfillToCompletion(jobId);
   revalidatePath("/dashboard");
   return { ok: true as const };
 }
@@ -97,14 +83,7 @@ export async function refreshNow(input: unknown) {
   if (!account || !account.userId.equals(userId))
     return { ok: false as const, error: "account_not_found" };
 
-  if (env.E2E_TEST_MODE) {
-    await runIncrementalSync(account._id);
-  } else {
-    await inngest.send({
-      name: "sync/incremental.requested",
-      data: { accountId: account._id.toHexString() },
-    });
-  }
+  await runIncrementalSync(account._id);
   revalidatePath("/dashboard");
   return { ok: true as const };
 }

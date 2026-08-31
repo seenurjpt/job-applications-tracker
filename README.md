@@ -12,9 +12,8 @@ the source of truth for the architecture; this README covers running it.
 
 Next.js 15 (App Router, Server Actions) · TypeScript strict · MongoDB (native
 driver) · Zod (single source of truth for every schema) · Auth.js v5 ·
-Inngest (durable sync jobs) · Anthropic SDK (Haiku for extraction, Sonnet for
-drafts) · Tailwind + TanStack Table · Vitest + mongodb-memory-server + MSW ·
-Playwright.
+Anthropic SDK (Haiku for extraction, Sonnet for drafts) · Tailwind + TanStack
+Table · Vitest + mongodb-memory-server + MSW · Playwright.
 
 ## Setup
 
@@ -24,8 +23,8 @@ Playwright.
    - `AUTH_SECRET`: `openssl rand -base64 32`
    - `TOKEN_ENCRYPTION_KEY`: `openssl rand -hex 32`
 3. Run MongoDB locally (`mongodb://localhost:27017`).
-4. `pnpm dev` — and in another terminal, `npx inngest-cli@latest dev` for
-   background sync jobs.
+4. `pnpm dev`. Sync ("Sync sent mail" / "Refresh now" on the dashboard) runs
+   inline in the request — no background job runner required.
 
 Users bring their own Anthropic API key (Settings → API key). The app ships
 with **no** Anthropic key in production; `ANTHROPIC_API_KEY_DEV` exists only
