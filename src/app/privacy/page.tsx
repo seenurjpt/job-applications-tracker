@@ -29,6 +29,14 @@ export default function PrivacyPage() {
           API. We never transmit full message bodies.
         </p>
         <p>
+          One exception, in your favour: when you explicitly ask for a
+          follow-up draft, the text of <strong>your own previously sent
+          email</strong> in that thread is included so the draft can match
+          your greeting, formatting, and signature. Only mail you wrote
+          yourself is ever used this way , received messages are never
+          transmitted in full.
+        </p>
+        <p>
           This processing uses <strong>your own Anthropic API key</strong>: you
           are Anthropic&apos;s customer for it, the data is processed under
           your own agreement with Anthropic, and data retention is governed by

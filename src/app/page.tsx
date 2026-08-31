@@ -167,8 +167,9 @@ export default async function Home() {
 
           <p className="text-xs leading-5 text-neutral-400">
             With your consent, we read your Gmail sent mail (read-only) and
-            create drafts. Only email metadata is ever processed , never full
-            message bodies, and nothing is used for advertising.
+            create drafts. Classification uses email metadata only , never
+            full message bodies; drafting may reuse the text of your own sent
+            email to match your style. Nothing is used for advertising.
           </p>
         </div>
 

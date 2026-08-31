@@ -150,11 +150,13 @@ const intentBatchSchema = z.array(
 /**
  * Classifies the intent of the latest outbound mail for a batch of
  * applications (on-demand backfill for rows synced before the intent field
- * existed). Returns only the items the model classified successfully.
+ * existed). Receives the whole outbound side of each thread plus whether the
+ * company replied, so stage-dependent intents (interview thank-yous, offer
+ * talk) classify correctly. Returns only the successfully classified items.
  */
 export async function classifyIntentBatch(
   deps: ExtractDeps,
-  items: Array<{ id: string; subject: string; snippet: string }>
+  items: Array<import("./prompts/intent").IntentInput>
 ): Promise<Map<string, "application" | "follow_up" | "interview" | "negotiation" | "other">> {
   const out = new Map<
     string,

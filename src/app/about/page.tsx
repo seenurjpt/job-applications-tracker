@@ -70,8 +70,9 @@ export default function AboutPage() {
           Classification and drafting run on <strong>your own Anthropic API
           key</strong>: you are Anthropic&apos;s customer for that processing,
           and retention is governed by your own Anthropic account settings.
-          Only email metadata is ever transmitted, never full message bodies,
-          and nothing is used for advertising. OAuth tokens and your key are
+          Classification uses email metadata only, never full message bodies;
+          drafting may reuse the text of your own sent email to match your
+          writing style. Nothing is used for advertising. OAuth tokens and your key are
           encrypted at rest, and disconnecting a mailbox permanently deletes
           its data. The full details are in the{" "}
           <Link href="/privacy">Privacy Policy</Link>.

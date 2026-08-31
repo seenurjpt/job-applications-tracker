@@ -63,17 +63,21 @@ export async function analyzeIntents() {
 
   const missing = await applications.findMissingIntent(userId);
   const { findByApplication } = await import("@/db/repositories/messages");
-  const items: Array<{ id: string; subject: string; snippet: string }> = [];
+  const items: Array<import("@/services/anthropic/prompts/intent").IntentInput> =
+    [];
   for (const app of missing) {
     const thread = await findByApplication(app._id);
-    const lastOutbound = [...thread]
-      .filter((m) => m.direction === "outbound")
-      .pop();
-    if (lastOutbound) {
+    const outbound = thread.filter((m) => m.direction === "outbound");
+    if (outbound.length > 0) {
       items.push({
         id: app._id.toHexString(),
-        subject: lastOutbound.subject,
-        snippet: lastOutbound.snippet,
+        // Last 5 outbound messages keep the payload small on long threads.
+        outbound: outbound.slice(-5).map((m) => ({
+          date: m.sentAt.toISOString().slice(0, 10),
+          subject: m.subject,
+          snippet: m.snippet,
+        })),
+        hasReply: thread.some((m) => m.direction === "inbound"),
       });
     }
   }

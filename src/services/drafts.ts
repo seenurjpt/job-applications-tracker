@@ -5,6 +5,7 @@ import { logger } from "@/lib/logger";
 import * as applicationsRepo from "@/db/repositories/applications";
 import * as messagesRepo from "@/db/repositories/messages";
 import * as accountsRepo from "@/db/repositories/accounts";
+import * as usersRepo from "@/db/repositories/users";
 import * as draftsRepo from "@/db/repositories/drafts";
 import { anthropicFor } from "@/services/anthropic/client";
 import { composeFollowUp } from "@/services/anthropic/compose";
@@ -44,6 +45,23 @@ export async function generateDraft(
     .pop();
   if (!lastOutbound) return err("no_outbound_message");
 
+  // Style reference: the user's own earlier email in this thread, fetched
+  // live from Gmail so the draft can mirror its greeting, formatting, and
+  // signature. Best-effort , a fetch failure falls back to snippets only.
+  let referenceEmail: string | null = null;
+  try {
+    const token = await getValidAccessToken(app.accountId);
+    if (token.ok) {
+      const { getMessageBody } = await import("@/services/gmail/messages");
+      const body = await getMessageBody(token.value, lastOutbound.gmailMessageId);
+      if (body) referenceEmail = body.slice(0, 6000);
+    }
+  } catch {
+    logger.warn("Could not fetch reference email for draft; using snippets");
+  }
+
+  const user = await usersRepo.findById(userId);
+
   try {
     const composed = await composeFollowUp(
       {
@@ -53,7 +71,17 @@ export async function generateDraft(
       },
       app,
       lastOutbound.subject,
-      tone
+      tone,
+      {
+        senderName: user?.name ?? null,
+        thread: thread.map((m) => ({
+          direction: m.direction,
+          date: m.sentAt.toISOString().slice(0, 10),
+          subject: m.subject,
+          snippet: m.snippet,
+        })),
+        referenceEmail,
+      }
     );
     const draft = await draftsRepo.insertGenerated({
       applicationId,
