@@ -46,6 +46,25 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-2">
+        <h2 className="text-lg font-semibold">Google API Limited Use disclosure</h2>
+        <p>
+          Job Tracker&apos;s use and transfer of information received from
+          Google APIs adheres to the{" "}
+          <a
+            href="https://developers.google.com/terms/api-services-user-data-policy"
+            className="underline"
+          >
+            Google API Services User Data Policy
+          </a>
+          , including the Limited Use requirements. Gmail data is used only to
+          provide the features described above, is never used for advertising,
+          and is never sold or transferred except as necessary to provide those
+          features (the metadata-only classification described above), with
+          your consent, or as required by law.
+        </p>
+      </section>
+
+      <section className="space-y-2">
         <h2 className="text-lg font-semibold">Deletion</h2>
         <p>
           Disconnecting a mailbox permanently deletes its stored messages,
