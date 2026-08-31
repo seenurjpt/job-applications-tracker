@@ -19,6 +19,12 @@ export const extractionResultSchema = z.object({
   role: z.string().nullable(),
   contactName: z.string().nullable(),
   source: z.enum(["direct", "linkedin", "ats", "referral", "unknown"]),
+  // Tolerant on purpose: an older cached response or a model that omits or
+  // mangles the field must not invalidate the whole batch.
+  intent: z
+    .enum(["application", "follow_up", "interview", "negotiation", "other"])
+    .nullable()
+    .catch(null),
 });
 
 export const extractionBatchSchema = z.array(extractionResultSchema);
@@ -132,6 +138,47 @@ export async function extractThreadBatch(
     }
   }
   return results;
+}
+
+const intentBatchSchema = z.array(
+  z.object({
+    id: z.string(),
+    intent: z.enum(["application", "follow_up", "interview", "negotiation", "other"]),
+  })
+);
+
+/**
+ * Classifies the intent of the latest outbound mail for a batch of
+ * applications (on-demand backfill for rows synced before the intent field
+ * existed). Returns only the items the model classified successfully.
+ */
+export async function classifyIntentBatch(
+  deps: ExtractDeps,
+  items: Array<{ id: string; subject: string; snippet: string }>
+): Promise<Map<string, "application" | "follow_up" | "interview" | "negotiation" | "other">> {
+  const out = new Map<
+    string,
+    "application" | "follow_up" | "interview" | "negotiation" | "other"
+  >();
+  if (items.length === 0) return out;
+  const { INTENT_SYSTEM_PROMPT, buildIntentUserMessage } = await import(
+    "./prompts/intent"
+  );
+  try {
+    const raw = await callModel(
+      deps,
+      [{ role: "user", content: buildIntentUserMessage(items) }],
+      "extraction",
+      INTENT_SYSTEM_PROMPT
+    );
+    for (const r of intentBatchSchema.parse(JSON.parse(stripFences(raw)))) {
+      out.set(r.id, r.intent);
+    }
+  } catch (e) {
+    if (e instanceof AnthropicKeyError) throw e;
+    logger.warn("Intent batch classification failed; skipping batch");
+  }
+  return out;
 }
 
 const replySchema = z.object({

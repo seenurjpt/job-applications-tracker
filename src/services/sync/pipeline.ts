@@ -284,6 +284,7 @@ export async function processMetadataBatch(
         role: existing.role,
         contactName: existing.contactName,
         source: existing.source,
+        intent: existing.mailIntent,
       });
     }
   }
@@ -398,6 +399,7 @@ async function hydrateAndUpsert(
     followUpCount: stats.followUpCount,
     confidence: extraction.confidence,
     extractedBy: ctx.extractionModel,
+    mailIntent: extraction.intent,
   });
   if (replyClassification) {
     await applicationsRepo.updateDerived(app._id, {

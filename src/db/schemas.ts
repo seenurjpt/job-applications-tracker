@@ -68,6 +68,15 @@ export const ApplicationSource = z.enum([
   "unknown",
 ]);
 
+/** Intent of the user's latest outbound mail in the thread. */
+export const MailIntent = z.enum([
+  "application", // sent the application itself
+  "follow_up", // chased status after applying
+  "interview", // scheduling, prep, or post-interview thank-you
+  "negotiation", // offer, salary, joining details
+  "other",
+]);
+
 export const applicationSchema = z.object({
   _id: objectId,
   userId: objectId,
@@ -90,6 +99,10 @@ export const applicationSchema = z.object({
   followUpCount: z.number().int().min(0),
 
   replyClassification: z.enum(["positive", "rejection", "neutral"]).nullable().default(null),
+
+  // What the user's latest outbound mail in the thread was about — the
+  // at-a-glance "why did I email them" flag on the applications table.
+  mailIntent: MailIntent.nullable().default(null),
 
   confidence: z.number().min(0).max(1),
   extractedBy: z.string(), // model id, for eval regression tracking
@@ -269,6 +282,7 @@ export type UsageEvent = z.infer<typeof usageEventSchema>;
 
 export type ApplicationStatusValue = z.infer<typeof ApplicationStatus>;
 export type ApplicationSourceValue = z.infer<typeof ApplicationSource>;
+export type MailIntentValue = z.infer<typeof MailIntent>;
 export type AccountStatusValue = z.infer<typeof AccountStatus>;
 export type KeyStatusValue = z.infer<typeof KeyStatus>;
 export type SyncJobStatusValue = z.infer<typeof SyncJobStatus>;

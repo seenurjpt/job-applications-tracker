@@ -4,6 +4,7 @@ import type {
   Application,
   ApplicationSourceValue,
   ApplicationStatusValue,
+  MailIntentValue,
 } from "@/db/schemas";
 
 const col = () => getDb().collection<Application>("applications");
@@ -76,6 +77,7 @@ export interface ExtractionUpsert {
   followUpCount: number;
   confidence: number;
   extractedBy: string;
+  mailIntent: MailIntentValue | null;
 }
 
 /**
@@ -107,6 +109,10 @@ export async function upsertFromExtraction(
     extractedBy: input.extractedBy,
     updatedAt: now,
   };
+  // Never null out an intent we already have (cache-hit re-hydrations).
+  if (input.mailIntent !== null || !existing?.mailIntent) {
+    $set.mailIntent = input.mailIntent;
+  }
 
   const edited = new Set(existing?.userEditedFields ?? []);
   for (const field of editable) {
@@ -130,6 +136,31 @@ export async function upsertFromExtraction(
   );
   if (!res) throw new Error("upsertFromExtraction returned no document");
   return res;
+}
+
+/** Applications still lacking an AI mail-intent flag (for on-demand backfill). */
+export async function findMissingIntent(
+  userId: ObjectId,
+  limit = 200
+): Promise<Application[]> {
+  return col()
+    .find({
+      userId,
+      status: { $ne: "not_an_application" },
+      $or: [{ mailIntent: null }, { mailIntent: { $exists: false } }],
+    })
+    .limit(limit)
+    .toArray();
+}
+
+export async function setMailIntent(
+  id: ObjectId,
+  intent: MailIntentValue
+): Promise<void> {
+  await col().updateOne(
+    { _id: id },
+    { $set: { mailIntent: intent, updatedAt: new Date() } }
+  );
 }
 
 /** Inline edit from the UI. Records the field so no sync ever overwrites it. */

@@ -38,6 +38,7 @@ export interface ApplicationDTO {
   followUpCount: number;
   confidence: number;
   userEditedFields: string[];
+  mailIntent: Application["mailIntent"];
 }
 
 export function toApplicationDTO(a: Application): ApplicationDTO {
@@ -58,6 +59,7 @@ export function toApplicationDTO(a: Application): ApplicationDTO {
     followUpCount: a.followUpCount,
     confidence: a.confidence,
     userEditedFields: a.userEditedFields,
+    mailIntent: a.mailIntent,
   };
 }
 

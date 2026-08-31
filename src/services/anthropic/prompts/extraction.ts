@@ -15,6 +15,10 @@ Extraction rules:
 - contactName: the human recipient, if a specific person. null for careers@ or
   no-reply addresses.
 - confidence: your certainty that this is a job application, 0 to 1.
+- intent: what the sender's email is doing — "application" (sending the
+  application itself), "follow_up" (chasing status after applying),
+  "interview" (scheduling, prep, or a post-interview thank-you),
+  "negotiation" (offer, salary, joining details), or "other".
 - Use null for anything not clearly stated. Never guess.
 
 Return ONLY a JSON array. One object per input thread, in the same order. No preamble,
@@ -22,7 +26,8 @@ no markdown fences, no explanation.
 
 [{"threadId": "...", "isJobApplication": bool, "confidence": 0.0-1.0,
   "company": string|null, "role": string|null, "contactName": string|null,
-  "source": "direct"|"linkedin"|"ats"|"referral"|"unknown"}]`;
+  "source": "direct"|"linkedin"|"ats"|"referral"|"unknown",
+  "intent": "application"|"follow_up"|"interview"|"negotiation"|"other"|null}]`;
 
 export const REPAIR_INSTRUCTION = `Your previous response was not valid JSON matching the required schema. Return ONLY the JSON array described in the system prompt — no markdown fences, no prose, one object per input thread in input order.`;
 

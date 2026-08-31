@@ -9,7 +9,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
-import { getApplicationThread } from "@/actions/applications";
+import { analyzeIntents, getApplicationThread } from "@/actions/applications";
 import { Input, Select } from "@/components/ui";
 import { InlineEditCell } from "@/components/inline-edit-cell";
 import { StatusBadge } from "@/components/status-badge";
@@ -39,6 +39,26 @@ function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString();
 }
 
+const INTENT_BADGE: Record<string, { label: string; className: string }> = {
+  application: { label: "Applied", className: "bg-neutral-100 text-neutral-700" },
+  follow_up: { label: "Follow-up", className: "bg-amber-50 text-amber-700" },
+  interview: { label: "Interview", className: "bg-blue-50 text-blue-700" },
+  negotiation: { label: "Negotiation", className: "bg-purple-50 text-purple-700" },
+  other: { label: "Other", className: "bg-neutral-100 text-neutral-500" },
+};
+
+function IntentBadge({ intent }: { intent: string | null }) {
+  if (!intent) return <span className="text-neutral-300">—</span>;
+  const b = INTENT_BADGE[intent] ?? INTENT_BADGE.other!;
+  return (
+    <span
+      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${b.className}`}
+    >
+      {b.label}
+    </span>
+  );
+}
+
 export function ApplicationsTable({
   applications,
 }: {
@@ -50,6 +70,8 @@ export function ApplicationsTable({
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
   const [threads, setThreads] = useState<Record<string, MessageDTO[]>>({});
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analyzeMessage, setAnalyzeMessage] = useState<string | null>(null);
 
   // Filters/sort live in URL search params so the back button restores state.
   const setParam = (key: string, value: string) => {
@@ -151,6 +173,11 @@ export function ApplicationsTable({
         cell: ({ row }) => <StatusBadge status={row.original.status} />,
       },
       {
+        id: "mailIntent",
+        header: "Mailed for",
+        cell: ({ row }) => <IntentBadge intent={row.original.mailIntent} />,
+      },
+      {
         id: "followUps",
         header: "Follow-ups",
         cell: ({ row }) => (
@@ -243,6 +270,29 @@ export function ApplicationsTable({
               setParam("q", (e.target as HTMLInputElement).value);
           }}
         />
+        {applications.some((a) => !a.mailIntent) ? (
+          <button
+            className="rounded-md border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 disabled:opacity-50"
+            data-testid="analyze-intents"
+            disabled={analyzing}
+            onClick={async () => {
+              setAnalyzing(true);
+              const res = await analyzeIntents();
+              setAnalyzing(false);
+              setAnalyzeMessage(
+                res.ok
+                  ? `Analyzed ${res.analyzed} application${res.analyzed === 1 ? "" : "s"}.`
+                  : `Could not analyze: ${res.error}`
+              );
+              router.refresh();
+            }}
+          >
+            {analyzing ? "Analyzing…" : "✨ Analyze intent"}
+          </button>
+        ) : null}
+        {analyzeMessage ? (
+          <span className="text-xs text-neutral-500">{analyzeMessage}</span>
+        ) : null}
       </div>
 
       <BulkDraftsBar selected={selected} onDone={() => setRowSelection({})} />
@@ -279,6 +329,16 @@ export function ApplicationsTable({
                   <tr>
                     <td colSpan={columns.length} className="p-0">
                       <div className="space-y-2 border-y border-neutral-200 bg-neutral-50 px-6 py-3">
+                        <div className="flex justify-end">
+                          <a
+                            href={`https://mail.google.com/mail/u/0/#all/${row.original.threadId}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs text-neutral-500 underline hover:text-neutral-800"
+                          >
+                            Open full thread in Gmail ↗
+                          </a>
+                        </div>
                         {(threads[row.original.id] ?? []).map((m) => (
                           <div
                             key={m.id}
@@ -304,8 +364,9 @@ export function ApplicationsTable({
                             <p className="font-medium text-neutral-800">
                               {m.subject}
                             </p>
-                            <p className="mt-0.5 line-clamp-2 text-neutral-500">
+                            <p className="mt-0.5 text-neutral-500">
                               {m.snippet}
+                              {m.snippet.length >= 180 ? "…" : ""}
                             </p>
                           </div>
                         ))}
