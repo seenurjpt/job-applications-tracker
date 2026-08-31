@@ -1,0 +1,2 @@
+# Append one SCORES line per eval run (printed by pnpm eval:extraction).
+# This checked-in history is the regression detector across prompt/model changes.

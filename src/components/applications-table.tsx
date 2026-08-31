@@ -1,0 +1,321 @@
+"use client";
+
+import { Fragment, useMemo, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  type ColumnDef,
+} from "@tanstack/react-table";
+import { getApplicationThread } from "@/actions/applications";
+import { Input, Select } from "@/components/ui";
+import { InlineEditCell } from "@/components/inline-edit-cell";
+import { StatusBadge } from "@/components/status-badge";
+import { BulkDraftsBar } from "@/components/bulk-drafts-modal";
+import type { ApplicationDTO, MessageDTO } from "@/lib/serialize";
+
+const RANGE_OPTIONS = [
+  { value: "", label: "All time" },
+  { value: "today", label: "Today" },
+  { value: "last_week", label: "Last week" },
+  { value: "last_month", label: "Last month" },
+  { value: "last_3_months", label: "Last 3 months" },
+  { value: "last_6_months", label: "Last 6 months" },
+];
+
+const STATUS_OPTIONS = [
+  { value: "", label: "All statuses" },
+  { value: "applied", label: "Applied" },
+  { value: "needs_follow_up", label: "Needs follow-up" },
+  { value: "replied", label: "Replied" },
+  { value: "interviewing", label: "Interviewing" },
+  { value: "rejected", label: "Rejected" },
+  { value: "ghosted", label: "Ghosted" },
+];
+
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString();
+}
+
+export function ApplicationsTable({
+  applications,
+}: {
+  applications: ApplicationDTO[];
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [threads, setThreads] = useState<Record<string, MessageDTO[]>>({});
+
+  // Filters/sort live in URL search params so the back button restores state.
+  const setParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set(key, value);
+    else params.delete(key);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const sortBy = searchParams.get("sortBy") ?? "appliedAt";
+  const sortDir = searchParams.get("sortDir") ?? "desc";
+  const toggleSort = (col: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sortBy", col);
+    params.set("sortDir", sortBy === col && sortDir === "desc" ? "asc" : "desc");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const toggleExpand = async (id: string) => {
+    if (expanded === id) {
+      setExpanded(null);
+      return;
+    }
+    setExpanded(id);
+    if (!threads[id]) {
+      const res = await getApplicationThread({ id });
+      if (res.ok) setThreads((prev) => ({ ...prev, [id]: res.messages }));
+    }
+  };
+
+  const columns = useMemo<ColumnDef<ApplicationDTO>[]>(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <input
+            type="checkbox"
+            checked={table.getIsAllRowsSelected()}
+            onChange={table.getToggleAllRowsSelectedHandler()}
+          />
+        ),
+        cell: ({ row }) => (
+          <input
+            type="checkbox"
+            data-testid={`select-row-${row.index}`}
+            checked={row.getIsSelected()}
+            onChange={row.getToggleSelectedHandler()}
+          />
+        ),
+      },
+      {
+        id: "company",
+        header: () => (
+          <button onClick={() => toggleSort("company")} className="font-medium">
+            Company {sortBy === "company" ? (sortDir === "asc" ? "↑" : "↓") : ""}
+          </button>
+        ),
+        cell: ({ row }) => (
+          <InlineEditCell
+            id={row.original.id}
+            field="company"
+            value={row.original.company}
+            edited={row.original.userEditedFields.includes("company")}
+          />
+        ),
+      },
+      {
+        id: "role",
+        header: "Role",
+        cell: ({ row }) => (
+          <InlineEditCell
+            id={row.original.id}
+            field="role"
+            value={row.original.role}
+            edited={row.original.userEditedFields.includes("role")}
+          />
+        ),
+      },
+      {
+        id: "appliedAt",
+        header: () => (
+          <button
+            onClick={() => toggleSort("appliedAt")}
+            className="font-medium"
+            data-testid="sort-applied"
+          >
+            Applied {sortBy === "appliedAt" ? (sortDir === "asc" ? "↑" : "↓") : ""}
+          </button>
+        ),
+        cell: ({ row }) => (
+          <span data-testid={`applied-at-${row.index}`}>
+            {fmtDate(row.original.appliedAt)}
+          </span>
+        ),
+      },
+      {
+        id: "status",
+        header: "Status",
+        cell: ({ row }) => <StatusBadge status={row.original.status} />,
+      },
+      {
+        id: "followUps",
+        header: "Follow-ups",
+        cell: ({ row }) => (
+          <span className="tabular-nums">{row.original.followUpCount}</span>
+        ),
+      },
+      {
+        id: "lastActivity",
+        header: () => (
+          <button onClick={() => toggleSort("lastActivityAt")} className="font-medium">
+            Last activity{" "}
+            {sortBy === "lastActivityAt" ? (sortDir === "asc" ? "↑" : "↓") : ""}
+          </button>
+        ),
+        cell: ({ row }) => fmtDate(row.original.lastActivityAt),
+      },
+      {
+        id: "open",
+        header: "",
+        cell: ({ row }) => (
+          <Link
+            href={`/applications/${row.original.id}`}
+            className="text-sm underline hover:text-neutral-600"
+          >
+            Open
+          </Link>
+        ),
+      },
+    ],
+    [sortBy, sortDir] // toggleSort is stable enough for this table's lifetime
+  );
+
+  const table = useReactTable({
+    data: applications,
+    columns,
+    state: { rowSelection },
+    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) => row.id,
+  });
+
+  const selected = applications.filter((a) => rowSelection[a.id]);
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <Select
+          data-testid="range-filter"
+          value={searchParams.get("range") ?? ""}
+          onChange={(e) => setParam("range", e.target.value)}
+        >
+          {RANGE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </Select>
+        <Select
+          data-testid="status-filter"
+          value={searchParams.get("status") ?? ""}
+          onChange={(e) => setParam("status", e.target.value)}
+        >
+          {STATUS_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </Select>
+        <Input
+          data-testid="search-input"
+          placeholder="Search company, role, contact…"
+          className="max-w-xs"
+          defaultValue={searchParams.get("q") ?? ""}
+          onKeyDown={(e) => {
+            if (e.key === "Enter")
+              setParam("q", (e.target as HTMLInputElement).value);
+          }}
+        />
+      </div>
+
+      <BulkDraftsBar selected={selected} onDone={() => setRowSelection({})} />
+
+      <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white">
+        <table className="w-full text-sm" data-testid="applications-table">
+          <thead className="border-b border-neutral-200 bg-neutral-50 text-left">
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id}>
+                {hg.headers.map((h) => (
+                  <th key={h.id} className="px-3 py-2 font-medium">
+                    {h.isPlaceholder
+                      ? null
+                      : flexRender(h.column.columnDef.header, h.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <Fragment key={row.id}>
+                <tr
+                  data-testid={`app-row-${row.index}`}
+                  className="border-b border-neutral-100 hover:bg-neutral-50"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-3 py-2">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td colSpan={columns.length} className="p-0">
+                    <button
+                      className="w-full py-0.5 text-center text-xs text-neutral-400 hover:text-neutral-700"
+                      onClick={() => toggleExpand(row.original.id)}
+                      data-testid={`expand-row-${row.index}`}
+                    >
+                      {expanded === row.original.id ? "▲ hide thread" : "▼ thread"}
+                    </button>
+                    {expanded === row.original.id ? (
+                      <div className="space-y-2 bg-neutral-50 px-6 py-3">
+                        {(threads[row.original.id] ?? []).map((m) => (
+                          <div key={m.id} className="flex gap-3 text-xs">
+                            <span
+                              className={`w-16 shrink-0 font-medium ${
+                                m.direction === "outbound"
+                                  ? "text-blue-700"
+                                  : "text-green-700"
+                              }`}
+                            >
+                              {m.direction === "outbound" ? "You →" : "← Them"}
+                            </span>
+                            <span className="w-24 shrink-0 text-neutral-500">
+                              {fmtDate(m.sentAt)}
+                            </span>
+                            <span className="truncate">
+                              <strong>{m.subject}</strong> — {m.snippet}
+                              {m.isFollowUp ? (
+                                <em className="ml-2 text-amber-700">follow-up</em>
+                              ) : null}
+                            </span>
+                          </div>
+                        ))}
+                        {!threads[row.original.id] ? (
+                          <p className="text-xs text-neutral-400">Loading…</p>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </td>
+                </tr>
+              </Fragment>
+            ))}
+            {applications.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-3 py-8 text-center text-neutral-400"
+                >
+                  No applications yet. Run a sync from the dashboard.
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

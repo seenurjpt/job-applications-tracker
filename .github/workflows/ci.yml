@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      # Dummy values so env validation passes; nothing here is a real secret.
+      MONGODB_URI: mongodb://localhost:27017/ci
+      MONGODB_DB: ci
+      AUTH_SECRET: ci-secret-0123456789abcdef0123456789abcd
+      AUTH_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: ci-client-id
+      GOOGLE_CLIENT_SECRET: ci-client-secret
+      TOKEN_ENCRYPTION_KEY: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint (includes the domain-purity rule)
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test:unit
+
+      - name: Integration tests (mongodb-memory-server + MSW)
+        run: pnpm test:integration
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: E2E tests (Playwright, stubbed OAuth, seeded database)
+        run: pnpm test:e2e
+
+      # Evals are deliberately excluded: they cost money and are
+      # non-deterministic. Run `pnpm eval:extraction` manually before merging
+      # a prompt or model change (uses ANTHROPIC_API_KEY_DEV).

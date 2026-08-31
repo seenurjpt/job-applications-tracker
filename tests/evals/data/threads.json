@@ -1,0 +1,682 @@
+[
+  {
+    "input": {
+      "threadId": "pos-0",
+      "subject": "Application for Senior Backend Engineer",
+      "snippet": "Please find attached my resume for the Senior Backend Engineer position at Nimbus Analytics.",
+      "to": [
+        "careers@nimbusanalytics.com"
+      ],
+      "date": "2026-03-02"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Nimbus Analytics",
+      "role": "Senior Backend Engineer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-1",
+      "subject": "Applying for Product Designer role",
+      "snippet": "I came across the Product Designer opening at Fernwood Labs and would love to be considered.",
+      "to": [
+        "jobs@fernwoodlabs.io"
+      ],
+      "date": "2026-03-03"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Fernwood Labs",
+      "role": "Product Designer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-2",
+      "subject": "Re: Application for Data Analyst",
+      "snippet": "Following up on my application from two weeks ago — happy to provide anything else you need.",
+      "to": [
+        "hr@brightpath.co"
+      ],
+      "date": "2026-03-04"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Brightpath",
+      "role": "Data Analyst",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-3",
+      "subject": "Software Engineer II — application",
+      "snippet": "Submitting my application for Software Engineer II as advertised on your careers page.",
+      "to": [
+        "talent@corvid.systems"
+      ],
+      "date": "2026-03-05"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Corvid Systems",
+      "role": "Software Engineer II",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-4",
+      "subject": "Application: Marketing Manager (Vireo Health)",
+      "snippet": "Dear hiring team, I am excited to apply for the Marketing Manager position.",
+      "to": [
+        "recruiting@vireohealth.com"
+      ],
+      "date": "2026-03-06"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Vireo Health",
+      "role": "Marketing Manager",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-5",
+      "subject": "Frontend Engineer application — Halcyon",
+      "snippet": "Thank you for confirming receipt. Attaching my portfolio as requested for the Frontend Engineer role.",
+      "to": [
+        "apply@jobs.halcyon.dev"
+      ],
+      "date": "2026-03-07"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Halcyon",
+      "role": "Frontend Engineer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-6",
+      "subject": "Your application to Quill (Staff Engineer)",
+      "snippet": "Completing my Greenhouse application for the Staff Engineer role at Quill.",
+      "to": [
+        "no-reply@boards.greenhouse.io"
+      ],
+      "date": "2026-03-08"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Quill",
+      "role": "Staff Engineer",
+      "source": "ats"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-7",
+      "subject": "Lattice Robotics — Machine Learning Engineer application",
+      "snippet": "Submitted via Lever: my application for Machine Learning Engineer at Lattice Robotics.",
+      "to": [
+        "applications@hire.lever.co"
+      ],
+      "date": "2026-03-09"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Lattice Robotics",
+      "role": "Machine Learning Engineer",
+      "source": "ats"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-8",
+      "subject": "Application submitted: DevOps Engineer at Meridian",
+      "snippet": "Your Workday application for DevOps Engineer at Meridian Corp has been submitted.",
+      "to": [
+        "meridian@myworkday.com"
+      ],
+      "date": "2026-03-10"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Meridian Corp",
+      "role": "DevOps Engineer",
+      "source": "ats"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-9",
+      "subject": "Re: Ashby application — QA Lead, Sundial",
+      "snippet": "Adding a note to my Ashby application for the QA Lead position at Sundial.",
+      "to": [
+        "sundial@ashbyhq.com"
+      ],
+      "date": "2026-03-11"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Sundial",
+      "role": "QA Lead",
+      "source": "ats"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-10",
+      "subject": "Referred by Priya — Platform Engineer role",
+      "snippet": "Priya Raman suggested I reach out about the Platform Engineer opening on your team at Coldbrook.",
+      "to": [
+        "dev-hiring@coldbrook.io"
+      ],
+      "date": "2026-03-12"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Coldbrook",
+      "role": "Platform Engineer",
+      "source": "referral"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-11",
+      "subject": "Introduction from Marcus — applying for Sales Lead",
+      "snippet": "Marcus passed along your address; I'd like to formally apply for the Sales Lead role at Riverstone.",
+      "to": [
+        "olivia@riverstone.com"
+      ],
+      "date": "2026-03-13"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Riverstone",
+      "role": "Sales Lead",
+      "source": "referral"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-12",
+      "subject": "Application for the Android Developer position",
+      "snippet": "I saw the Android Developer post on LinkedIn and am submitting my CV for consideration at Pinefield.",
+      "to": [
+        "careers@pinefield.app"
+      ],
+      "date": "2026-03-14"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Pinefield",
+      "role": "Android Developer",
+      "source": "linkedin"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-13",
+      "subject": "Following up — Security Engineer application",
+      "snippet": "Checking in on the status of my Security Engineer application from March 3rd.",
+      "to": [
+        "security-jobs@oakhaven.net"
+      ],
+      "date": "2026-03-15"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Oakhaven",
+      "role": "Security Engineer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-14",
+      "subject": "Candidature — Ingénieur logiciel",
+      "snippet": "Veuillez trouver ci-joint mon CV pour le poste d'ingénieur logiciel chez Verdier SA.",
+      "to": [
+        "rh@verdier.fr"
+      ],
+      "date": "2026-03-16"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Verdier SA",
+      "role": "Ingénieur logiciel",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-15",
+      "subject": "Application for Technical Writer (contract)",
+      "snippet": "Attaching writing samples and my resume for the contract Technical Writer role at Glasswing.",
+      "to": [
+        "docs-team@glasswing.dev"
+      ],
+      "date": "2026-03-17"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Glasswing",
+      "role": "Technical Writer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-16",
+      "subject": "Re: Re: Application — Site Reliability Engineer",
+      "snippet": "Thanks for the quick reply! Answers to your questions about my SRE application below.",
+      "to": [
+        "sre-hiring@tundra.cloud"
+      ],
+      "date": "2026-03-18"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Tundra",
+      "role": "Site Reliability Engineer",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-17",
+      "subject": "Junior Accountant opening — my application",
+      "snippet": "I would like to apply for the Junior Accountant vacancy listed on Naukri.",
+      "to": [
+        "careers@shardul.in"
+      ],
+      "date": "2026-03-19"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Shardul",
+      "role": "Junior Accountant",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-18",
+      "subject": "Application for Research Scientist, Vision",
+      "snippet": "Please consider my attached CV for the Research Scientist, Vision position at Heliotrope AI.",
+      "to": [
+        "research-jobs@heliotrope.ai"
+      ],
+      "date": "2026-03-20"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Heliotrope AI",
+      "role": "Research Scientist, Vision",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "pos-19",
+      "subject": "Growth PM role — application + portfolio",
+      "snippet": "Applying for the Growth PM role; my portfolio covers the experiments I ran at my current company.",
+      "to": [
+        "people@daybreak.so"
+      ],
+      "date": "2026-03-21"
+    },
+    "expected": {
+      "isJobApplication": true,
+      "company": "Daybreak",
+      "role": "Growth PM",
+      "source": "direct"
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-0",
+      "subject": "Your weekly job alert: 45 new engineer roles",
+      "snippet": "LinkedIn job alerts — Software Engineer roles near you.",
+      "to": [
+        "me@example.com"
+      ],
+      "date": "2026-03-22"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-1",
+      "subject": "We're hiring! Join our webinar",
+      "snippet": "Our recruiting team is hosting a webinar about careers in tech. Register now!",
+      "to": [
+        "me@example.com"
+      ],
+      "date": "2026-03-23"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-2",
+      "subject": "Re: Dinner Friday?",
+      "snippet": "8pm works — see you at the usual place.",
+      "to": [
+        "sam.friend@gmail.com"
+      ],
+      "date": "2026-03-24"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-3",
+      "subject": "Invoice #2291 — March services",
+      "snippet": "Attached is the invoice for March consulting services.",
+      "to": [
+        "accounts@clientco.com"
+      ],
+      "date": "2026-03-25"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-4",
+      "subject": "Quick question about your open role",
+      "snippet": "Hi! I'm a recruiter at TalentBridge — are you open to new opportunities? We have clients hiring engineers.",
+      "to": [
+        "me@example.com"
+      ],
+      "date": "2026-03-26"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-5",
+      "subject": "Great meeting you at PyConf",
+      "snippet": "Wanted to stay in touch after our chat about data pipelines. Coffee sometime?",
+      "to": [
+        "alex@bigco.com"
+      ],
+      "date": "2026-03-27"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-6",
+      "subject": "Re: Interview availability",
+      "snippet": "Tuesday 2pm works for the call about the mentorship program.",
+      "to": [
+        "events@codementorship.org"
+      ],
+      "date": "2026-03-28"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-7",
+      "subject": "Newsletter draft for review",
+      "snippet": "Here's the April newsletter draft — the hiring section still needs numbers.",
+      "to": [
+        "team@myside.dev"
+      ],
+      "date": "2026-03-01"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-8",
+      "subject": "Your Amazon order has shipped",
+      "snippet": "Forwarding the tracking link for the monitor.",
+      "to": [
+        "me+notes@example.com"
+      ],
+      "date": "2026-03-02"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-9",
+      "subject": "Resume review notes for Jordan",
+      "snippet": "As promised, my feedback on your resume — the summary section needs tightening. Good luck applying!",
+      "to": [
+        "jordan.mentee@gmail.com"
+      ],
+      "date": "2026-03-03"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-10",
+      "subject": "Re: Apartment application documents",
+      "snippet": "Attaching the signed rental application and proof of income for unit 4B.",
+      "to": [
+        "leasing@parkview-apts.com"
+      ],
+      "date": "2026-03-04"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-11",
+      "subject": "Speaking opportunity at DevSummit",
+      "snippet": "Thanks for the invite — I'd love to give the talk on job queue design.",
+      "to": [
+        "speakers@devsummit.io"
+      ],
+      "date": "2026-03-05"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-12",
+      "subject": "Re: Reference for Maya",
+      "snippet": "Happy to be a reference for Maya's application to your team — she's excellent.",
+      "to": [
+        "hiring@somestartup.com"
+      ],
+      "date": "2026-03-06"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-13",
+      "subject": "Freelance proposal: landing page rebuild",
+      "snippet": "Here's my proposal and quote for the landing page project.",
+      "to": [
+        "dana@smallbiz.shop"
+      ],
+      "date": "2026-03-07"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-14",
+      "subject": "Course enrollment confirmation needed",
+      "snippet": "Following up on my enrollment application for the ML certificate program.",
+      "to": [
+        "admissions@university.edu"
+      ],
+      "date": "2026-03-08"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-15",
+      "subject": "Team offsite planning",
+      "snippet": "Poll for offsite dates — also we should discuss the open headcount and hiring plan.",
+      "to": [
+        "team@myside.dev"
+      ],
+      "date": "2026-03-09"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-16",
+      "subject": "Re: Your candidacy — scheduling",
+      "snippet": "Confirming Thursday 11am for the phone screen. Dial-in below.",
+      "to": [
+        "scheduling@recruitco.com"
+      ],
+      "date": "2026-03-10"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-17",
+      "subject": "Donation receipt request",
+      "snippet": "Could you resend the receipt for my March donation?",
+      "to": [
+        "support@charity.org"
+      ],
+      "date": "2026-03-11"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-18",
+      "subject": "Beta access request",
+      "snippet": "I'd love early access to the API — happy to share feedback.",
+      "to": [
+        "beta@newtool.ai"
+      ],
+      "date": "2026-03-12"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  },
+  {
+    "input": {
+      "threadId": "neg-19",
+      "subject": "Re: Passport renewal appointment",
+      "snippet": "Attaching the completed application form DS-82 as requested.",
+      "to": [
+        "appointments@travel-docs.com"
+      ],
+      "date": "2026-03-13"
+    },
+    "expected": {
+      "isJobApplication": false,
+      "company": null,
+      "role": null,
+      "source": null
+    }
+  }
+]

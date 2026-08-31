@@ -1,0 +1,11 @@
+packages:
+  - "."
+
+allowBuilds:
+  esbuild: true
+  mongodb-memory-server: true
+  msw: true
+  protobufjs: true
+  unrs-resolver: true
+  sharp: true
+  "@playwright/test": true
