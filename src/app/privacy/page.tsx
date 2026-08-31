@@ -3,6 +3,8 @@
 
 import { PublicPage, PublicSection } from "@/components/public-page";
 
+export const dynamic = "force-static";
+
 export const metadata = { title: "Privacy Policy , Job Tracker" };
 
 export default function PrivacyPage() {

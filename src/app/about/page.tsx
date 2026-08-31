@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { PublicPage, PublicSection } from "@/components/public-page";
 
+export const dynamic = "force-static";
+
 export const metadata = {
   title: "About , Job Tracker",
   description:

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { PublicPage, PublicSection } from "@/components/public-page";
 
+export const dynamic = "force-static";
+
 export const metadata = { title: "Terms of Service , Job Tracker" };
 
 export default function TermsPage() {
