@@ -14,6 +14,30 @@ html {
   scrollbar-gutter: stable both-edges;
 }
 
+/* Thin, soft-indigo scrollbars, everywhere (page + inner scroll containers). */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--color-indigo-300) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-indigo-300);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-indigo-400);
+}
+
 body {
   @apply bg-neutral-50 text-neutral-900 antialiased;
 }
