@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
+  cancelSync,
   estimateBackfill,
   refreshNow,
   resumeSync,
@@ -41,6 +42,7 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
   const router = useRouter();
   const [now, setNow] = useState(() => Date.now());
   const [resuming, setResuming] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
   const [resumeError, setResumeError] = useState<string | null>(null);
   const resumeAttempted = useRef(false);
 
@@ -67,6 +69,13 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
     if (!res.ok && res.error !== "job_still_active") {
       setResumeError(res.error);
     }
+    router.refresh();
+  };
+
+  const doCancel = async () => {
+    setCancelling(true);
+    await cancelSync({ jobId: job.id });
+    setCancelling(false);
     router.refresh();
   };
 
@@ -104,6 +113,16 @@ function ActiveJobBanner({ job }: { job: SyncJobDTO }) {
         ) : null}
         <Button size="sm" variant="outline" onClick={() => router.refresh()}>
           Refresh
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="text-red-600 hover:bg-red-50"
+          disabled={cancelling}
+          data-testid="cancel-sync"
+          onClick={() => void doCancel()}
+        >
+          {cancelling ? "Cancelling…" : "Cancel"}
         </Button>
       </div>
       {resumeError ? (
@@ -175,6 +194,15 @@ export function SyncControls({
           onClick={() => run(() => resumeSync({ jobId: activeJob.id }))}
         >
           Resume
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="text-red-600 hover:bg-red-50"
+          disabled={pending}
+          onClick={() => run(() => cancelSync({ jobId: activeJob.id }))}
+        >
+          Cancel
         </Button>
       </div>
     );
