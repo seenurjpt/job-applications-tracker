@@ -68,7 +68,7 @@ export default async function AppLayout({
           />
         </div>
         {/* Mobile nav row */}
-        <div className="mx-auto max-w-6xl overflow-x-auto border-t border-neutral-100 px-4 py-1.5 sm:hidden">
+        <div className="no-scrollbar mx-auto max-w-6xl overflow-x-auto border-t border-neutral-100 px-4 py-1.5 sm:hidden">
           <AppNav />
         </div>
       </header>

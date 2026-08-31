@@ -79,7 +79,7 @@ export default async function ApplicationsPage({
           </a>
         </div>
       </div>
-      <nav className="flex gap-1 overflow-x-auto border-b border-neutral-200 text-sm">
+      <nav className="no-scrollbar flex gap-1 overflow-x-auto border-b border-neutral-200 text-sm">
         {tabs.map((t) => (
           <a
             key={t.label}
