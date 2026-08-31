@@ -7,7 +7,9 @@ export const metadata = {
   title: "About , Job Tracker",
   description:
     "What Job Tracker does, how it works, and how it treats your data.",
-  authors: [{ name: "Sunny Rajput" }],
+  authors: [
+    { name: "Sunny Rajput", url: "https://portfolio-sunny-five.vercel.app/" },
+  ],
 };
 
 const STEPS = [
@@ -79,7 +81,14 @@ export default function AboutPage() {
       <PublicSection title="Author">
         <p>
           Job Tracker is designed, built, and maintained by{" "}
-          <strong className="text-neutral-900">Sunny Rajput</strong>.
+          <a
+            href="https://portfolio-sunny-five.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sunny Rajput
+          </a>
+          .
         </p>
       </PublicSection>
 

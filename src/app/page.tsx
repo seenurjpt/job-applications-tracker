@@ -79,8 +79,15 @@ export default async function Home() {
 
         <p className="text-sm text-indigo-200">
           © 2026 Job Tracker · Built by{" "}
-          <span className="font-medium text-white">Sunny Rajput</span>. All
-          rights reserved.
+          <a
+            href="https://portfolio-sunny-five.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium text-white underline-offset-2 hover:underline"
+          >
+            Sunny Rajput
+          </a>
+          . All rights reserved.
         </p>
       </section>
 
@@ -166,7 +173,17 @@ export default async function Home() {
         </div>
 
         <footer className="flex items-center justify-between text-xs text-neutral-400">
-          <span className="lg:hidden">© 2026 Job Tracker · by Sunny Rajput</span>
+          <span className="lg:hidden">
+            © 2026 Job Tracker · by{" "}
+            <a
+              href="https://portfolio-sunny-five.vercel.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-neutral-700 hover:underline"
+            >
+              Sunny Rajput
+            </a>
+          </span>
           <span className="hidden lg:inline" />
           <span className="flex gap-4">
             <Link href="/about" className="hover:text-neutral-700 hover:underline">
