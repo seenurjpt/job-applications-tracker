@@ -44,68 +44,68 @@ export default async function SettingsPage() {
               timezone: formData.get("timezone"),
             });
           }}
-          className="space-y-4"
+          className="space-y-5"
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
-              <span className="text-sm font-medium text-neutral-700">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="block space-y-1.5">
+              <span className="block text-sm font-medium text-neutral-800">
                 Needs follow-up after
               </span>
-              <div className="relative mt-1.5">
+              <span className="relative block">
                 <Input
                   name="followUpAfterDays"
                   type="number"
                   min={1}
                   defaultValue={user.settings.followUpAfterDays}
-                  className="pr-14"
+                  className="pr-16"
                 />
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-neutral-400">
+                <span className="pointer-events-none absolute inset-y-0 right-8 flex items-center text-sm text-neutral-400">
                   days
                 </span>
-              </div>
-              <span className="mt-1 block text-xs text-neutral-500">
-                No reply for this long marks an application “needs follow-up”.
+              </span>
+              <span className="block text-xs leading-5 text-neutral-500">
+                No reply for this long marks it “needs follow-up”.
               </span>
             </label>
-            <label className="block">
-              <span className="text-sm font-medium text-neutral-700">
+            <label className="block space-y-1.5">
+              <span className="block text-sm font-medium text-neutral-800">
                 Ghosted after
               </span>
-              <div className="relative mt-1.5">
+              <span className="relative block">
                 <Input
                   name="ghostAfterDays"
                   type="number"
                   min={1}
                   defaultValue={user.settings.ghostAfterDays}
-                  className="pr-14"
+                  className="pr-16"
                 />
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-neutral-400">
+                <span className="pointer-events-none absolute inset-y-0 right-8 flex items-center text-sm text-neutral-400">
                   days
                 </span>
-              </div>
-              <span className="mt-1 block text-xs text-neutral-500">
+              </span>
+              <span className="block text-xs leading-5 text-neutral-500">
                 Still nothing after this long counts as “ghosted”.
               </span>
             </label>
           </div>
-          <label className="block">
-            <span className="text-sm font-medium text-neutral-700">
+
+          <label className="block space-y-1.5">
+            <span className="block text-sm font-medium text-neutral-800">
               Mailbox timezone
             </span>
             <Input
               name="timezone"
               defaultValue={user.settings.timezone}
               placeholder="e.g. Asia/Kolkata"
-              className="mt-1.5 sm:max-w-72"
+              className="block sm:max-w-72"
             />
-            <span className="mt-1 block text-xs text-neutral-500">
+            <span className="block text-xs leading-5 text-neutral-500">
               Used for Gmail date filters when syncing.
             </span>
           </label>
-          <div className="border-t border-neutral-100 pt-3">
-            <Button type="submit" size="sm">
-              Save changes
-            </Button>
+
+          <div className="border-t border-neutral-100 pt-4">
+            <Button type="submit">Save changes</Button>
           </div>
         </form>
       </Card>
