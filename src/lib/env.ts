@@ -8,6 +8,8 @@ const schema = z
     AUTH_URL: z.string().url().default("http://localhost:3000"),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+    // Search Console ownership verification token (OAuth branding review).
+    GOOGLE_SITE_VERIFICATION: z.string().optional(),
     TOKEN_ENCRYPTION_KEY: z.string().length(64),
     ANTHROPIC_API_KEY_DEV: z.string().startsWith("sk-ant-").optional(),
     ANTHROPIC_EXTRACTION_MODEL: z.string().default("claude-haiku-4-5-20251001"),
