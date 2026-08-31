@@ -7,6 +7,7 @@ export const metadata = {
   title: "About , Job Tracker",
   description:
     "What Job Tracker does, how it works, and how it treats your data.",
+  authors: [{ name: "Sunny Rajput" }],
 };
 
 const STEPS = [
@@ -72,6 +73,13 @@ export default function AboutPage() {
           encrypted at rest, and disconnecting a mailbox permanently deletes
           its data. The full details are in the{" "}
           <Link href="/privacy">Privacy Policy</Link>.
+        </p>
+      </PublicSection>
+
+      <PublicSection title="Author">
+        <p>
+          Job Tracker is designed, built, and maintained by{" "}
+          <strong className="text-neutral-900">Sunny Rajput</strong>.
         </p>
       </PublicSection>
 

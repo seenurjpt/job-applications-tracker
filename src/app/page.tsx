@@ -78,7 +78,9 @@ export default async function Home() {
         </div>
 
         <p className="text-sm text-indigo-200">
-          © 2026 Job Tracker. All rights reserved.
+          © 2026 Job Tracker · Built by{" "}
+          <span className="font-medium text-white">Sunny Rajput</span>. All
+          rights reserved.
         </p>
       </section>
 
@@ -164,7 +166,7 @@ export default async function Home() {
         </div>
 
         <footer className="flex items-center justify-between text-xs text-neutral-400">
-          <span className="lg:hidden">© 2026 Job Tracker</span>
+          <span className="lg:hidden">© 2026 Job Tracker · by Sunny Rajput</span>
           <span className="hidden lg:inline" />
           <span className="flex gap-4">
             <Link href="/about" className="hover:text-neutral-700 hover:underline">
