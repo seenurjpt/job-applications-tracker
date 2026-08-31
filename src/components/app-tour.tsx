@@ -4,6 +4,11 @@
 // dependencies. Auto-starts once for new users (persisted per user in
 // Mongo via markTourSeen); restartable anytime from the navbar ? button,
 // which dispatches the "apptour:start" event.
+//
+// Smoothness: a requestAnimationFrame loop measures the target every frame
+// and eases the spotlight/card toward it with direct style writes — no
+// per-frame React renders, no CSS transitions fighting live scroll. Step
+// changes glide; scrolling tracks 1:1.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -44,6 +49,10 @@ const STEPS: TourStep[] = [
   },
 ];
 
+const PAD = 6;
+const CARD_GAP = 14;
+const EASE = 0.22;
+
 function findTarget(step: TourStep): HTMLElement | null {
   // Some anchors render twice (desktop + mobile nav) — pick the visible one.
   const candidates = document.querySelectorAll<HTMLElement>(
@@ -57,6 +66,13 @@ function findTarget(step: TourStep): HTMLElement | null {
   return null;
 }
 
+interface Box {
+  t: number;
+  l: number;
+  w: number;
+  h: number;
+}
+
 export function AppTour({
   autoStart,
   markSeenAction,
@@ -68,20 +84,29 @@ export function AppTour({
   const router = useRouter();
   const [steps, setSteps] = useState<TourStep[]>([]);
   const [idx, setIdx] = useState<number | null>(null);
-  const [rect, setRect] = useState<DOMRect | null>(null);
+  const [shown, setShown] = useState(false); // drives backdrop fade
+  const spotRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const boxRef = useRef<Box | null>(null);
   const autoStarted = useRef(false);
   const seenMarked = useRef(!autoStart);
 
   const start = useCallback(() => {
     const available = STEPS.filter((s) => findTarget(s));
     if (available.length === 0) return;
+    boxRef.current = null;
     setSteps(available);
     setIdx(0);
+    requestAnimationFrame(() => setShown(true));
   }, []);
 
   const finish = useCallback(() => {
-    setIdx(null);
-    setRect(null);
+    setShown(false);
+    // Let the fade-out play before unmounting.
+    setTimeout(() => {
+      setIdx(null);
+      boxRef.current = null;
+    }, 220);
     if (!seenMarked.current) {
       seenMarked.current = true;
       void markSeenAction();
@@ -112,7 +137,24 @@ export function AppTour({
     }
   }, [autoStart, pathname, start]);
 
-  // Measure the current step's target; keep measuring on resize/scroll.
+  // Keyboard: ← back, → / Enter next, Esc close.
+  useEffect(() => {
+    if (idx === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") finish();
+      else if (e.key === "ArrowRight" || e.key === "Enter") {
+        e.preventDefault();
+        setIdx((i) => (i !== null && i + 1 < steps.length ? i + 1 : (finish(), i)));
+      } else if (e.key === "ArrowLeft") {
+        setIdx((i) => (i !== null && i > 0 ? i - 1 : i));
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [idx, steps.length, finish]);
+
+  // The animation loop: measure every frame, ease toward the target, write
+  // styles directly. Runs only while the tour is open.
   useEffect(() => {
     if (idx === null) return;
     const step = steps[idx];
@@ -122,62 +164,112 @@ export function AppTour({
       setIdx(idx + 1 < steps.length ? idx + 1 : null);
       return;
     }
-    el.scrollIntoView({ block: "center", behavior: "smooth" });
-    const measure = () => setRect(el.getBoundingClientRect());
-    const t = setTimeout(measure, 250);
-    window.addEventListener("resize", measure);
-    window.addEventListener("scroll", measure, true);
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("scroll", measure, true);
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    el.scrollIntoView({
+      block: "center",
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+
+    let raf = 0;
+    const tick = () => {
+      const r = el.getBoundingClientRect();
+      const target: Box = {
+        t: r.top - PAD,
+        l: r.left - PAD,
+        w: r.width + PAD * 2,
+        h: r.height + PAD * 2,
+      };
+      const cur = boxRef.current;
+      let next: Box;
+      if (!cur || reduceMotion) {
+        next = target;
+      } else {
+        next = {
+          t: cur.t + (target.t - cur.t) * EASE,
+          l: cur.l + (target.l - cur.l) * EASE,
+          w: cur.w + (target.w - cur.w) * EASE,
+          h: cur.h + (target.h - cur.h) * EASE,
+        };
+        if (
+          Math.abs(next.t - target.t) < 0.5 &&
+          Math.abs(next.l - target.l) < 0.5 &&
+          Math.abs(next.w - target.w) < 0.5 &&
+          Math.abs(next.h - target.h) < 0.5
+        ) {
+          next = target;
+        }
+      }
+      boxRef.current = next;
+
+      const spot = spotRef.current;
+      if (spot) {
+        spot.style.transform = `translate(${next.l}px, ${next.t}px)`;
+        spot.style.width = `${next.w}px`;
+        spot.style.height = `${next.h}px`;
+      }
+
+      const card = cardRef.current;
+      if (card) {
+        const ch = card.offsetHeight || 180;
+        const cw = card.offsetWidth || 320;
+        const below = next.t + next.h + CARD_GAP + ch < window.innerHeight - 12;
+        const top = below
+          ? next.t + next.h + CARD_GAP
+          : Math.max(12, next.t - CARD_GAP - ch);
+        const left = Math.max(
+          12,
+          Math.min(next.l, window.innerWidth - cw - 12)
+        );
+        card.style.transform = `translate(${left}px, ${top}px)`;
+      }
+
+      raf = requestAnimationFrame(tick);
     };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [idx, steps]);
 
-  if (idx === null || !steps[idx] || !rect) return null;
+  if (idx === null || !steps[idx]) return null;
   const step = steps[idx];
   const last = idx === steps.length - 1;
 
-  const PAD = 6;
-  const below = rect.bottom + 190 < window.innerHeight;
-  const tooltipTop = below ? rect.bottom + PAD + 10 : undefined;
-  const tooltipBottom = below
-    ? undefined
-    : window.innerHeight - rect.top + PAD + 10;
-  const tooltipLeft = Math.max(
-    12,
-    Math.min(rect.left, window.innerWidth - 332)
-  );
-
   return (
-    <div className="fixed inset-0 z-[100]" data-testid="app-tour">
-      {/* Spotlight: everything but the target is dimmed. */}
+    <div
+      className={`fixed inset-0 z-[100] transition-opacity duration-200 ${
+        shown ? "opacity-100" : "opacity-0"
+      }`}
+      data-testid="app-tour"
+    >
+      {/* Spotlight: everything but the target is dimmed. Positioned via
+          transform each frame by the animation loop. */}
       <div
-        className="absolute rounded-lg transition-all duration-300"
-        style={{
-          top: rect.top - PAD,
-          left: rect.left - PAD,
-          width: rect.width + PAD * 2,
-          height: rect.height + PAD * 2,
-          boxShadow: "0 0 0 9999px rgba(23, 23, 42, 0.55)",
-        }}
+        ref={spotRef}
+        className="absolute left-0 top-0 rounded-lg will-change-transform"
+        style={{ boxShadow: "0 0 0 9999px rgba(23, 23, 42, 0.55)" }}
       />
-      {/* Click-catcher so clicks outside the card do nothing while touring. */}
+      {/* Click-catcher so clicks outside the card end the tour. */}
       <div className="absolute inset-0" onClick={finish} />
 
       <div
-        className="absolute w-80 max-w-[calc(100vw-24px)] rounded-xl border border-indigo-100 bg-white p-4 shadow-2xl"
-        style={{ top: tooltipTop, bottom: tooltipBottom, left: tooltipLeft }}
+        ref={cardRef}
+        className="absolute left-0 top-0 w-80 max-w-[calc(100vw-24px)] rounded-xl border border-indigo-100 bg-white p-4 shadow-2xl will-change-transform"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-sm font-semibold text-indigo-900">{step.title}</p>
-        <p className="mt-1.5 text-sm leading-6 text-neutral-600">{step.body}</p>
+        {/* Keyed so the content cross-fades on step change. */}
+        <div key={step.target} className="animate-tour-card">
+          <p className="text-sm font-semibold text-indigo-900">{step.title}</p>
+          <p className="mt-1.5 text-sm leading-6 text-neutral-600">
+            {step.body}
+          </p>
+        </div>
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             {steps.map((s, i) => (
               <span
                 key={s.target}
-                className={`h-1.5 rounded-full transition-all ${
+                className={`h-1.5 rounded-full transition-all duration-300 ${
                   i === idx ? "w-4 bg-indigo-600" : "w-1.5 bg-neutral-300"
                 }`}
               />

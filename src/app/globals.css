@@ -59,6 +59,28 @@ progress {
   animation: indeterminate 1.4s ease-in-out infinite;
 }
 
+/* Tour card content: subtle fade/slide on each step change. */
+@keyframes tour-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-tour-card {
+  animation: tour-card-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-tour-card {
+    animation: none;
+  }
+}
+
 /* Scrollable containers that should not show a scrollbar (tab rows, nav). */
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */
